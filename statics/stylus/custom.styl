@@ -1,0 +1,705 @@
+$palette = ({'base_color':#8abe9b, 'back_color':#5c8692, 'active_color':#4a6d8b}) ({'base_color':#0d58a2, 'back_color':#365879, 'active_color':#d87a25}) ({'base_color':#14a085, 'back_color':#4a8b8b, 'active_color':#0d455d}) ({'base_color':#d40000, 'back_color':#333333, 'active_color':#800000})
+$choice = 0//0, 1, 2 or 3
+base_color = $palette[$choice]['base_color']
+back_color = $palette[$choice]['back_color']
+active_color = $palette[$choice]['active_color']
+@import 'functions'
+*
+	outline none !important
+	&:not([class*="sweet-"]):not(.rowBox):not(input):not(select):not(option):not([class*="form-control"]):not([class*="input-"]):not(.fix-table):not(table):not(thead):not(tbody):not(tfoot):not(tr):not(th):not(td)
+		transition all 250ms cubic-bezier(.55,.055,.675,.19)
+		// make_transition()
+html, body
+	width 100% !important
+	height 100% !important
+	margin 0
+	padding 0
+	speak none
+	font-style normal
+	font-weight normal
+	font-variant normal
+	text-transform none
+	text-rendering auto
+	//text-rendering optimizeLegibility !important
+	-webkit-font-smoothing antialiased
+	-moz-osx-font-smoothing grayscale
+body
+	//background-image radial-gradient(to bottom right, back_color, rgba(255,255,255,.5))
+	//background-image radial-gradient(ellipse at bottom right, rgba(230,239,248,.9) 0%, back_color 100%)
+	//background radial-gradient(ellipse at bottom right, rgba(210,224,235,1) 0%, rgba(57,108,123,1) 100%)
+	background radial-gradient(ellipse at bottom right, lighten(saturate(lighten(back_color,78%),24.5%),10%) 0%, darken(saturate(back_color, 39%),23%) 100%)
+	background-repeat no-repeat
+	background-attachment fixed
+	margin-top 45px !important
+	#breadcrumbs
+		margin-top 60px !important
+		margin-bottom 0 !important
+		border none
+		border-radius 0px
+		background-color transparent !important
+		fix_outborder()
+		& *, &
+			color #fff !important
+			li.active
+				color darken(#fff, 15%) !important
+		&>li+li::before
+			//content "\007C"
+			padding 0 2px !important
+			color darken(active_color, 15%) !important
+			font-size 10px !important
+	#container
+		//background-color #f9f9f9 !important
+		width: 100% !important;
+		margin 15px auto !important
+		padding 0 !important
+		background-color transparent !important
+		position absolute
+		#left-content, #right-content
+			background-color transparent !important
+			display: flex !important;
+			flex-direction: column !important;
+			fix_outborder()
+			&:before, &:after
+				content ''
+				display table
+		#left-content
+			padding 15px !important
+			.fix-table
+				&, *
+					transition none !important
+				&:not(:nth-child(1))
+					margin-top 15px !important
+				padding 15px 15px 0 15px !important
+				background-color #fff !important
+				fix_outborder()
+			.detail-card + .btn-actions, .rowBox + .fix-table, .btn-actions + .fix-table, .detail-card + .fix-table, .fix-table + .btn-actions
+				margin-top 15px !important
+			.detail-card
+				.dl-horizontal
+					margin-bottom 0 !important
+				padding 15px !important
+				background-color #fff !important
+				fix_outborder(1)
+				& *
+					font-size 12px !important
+			form
+				margin 0 auto
+				//padding 0 !important
+				padding 15px !important
+				&:not(.big-form):not(.customform)
+					background-color #fff !important
+					min-width 280px !important
+					width 360px !important
+					fix_outborder()
+				legend
+					margin-bottom 15px !important
+				textarea
+					width 99.8% !important
+				.form-group:last-child
+					margin-bottom 0 !important
+				p.help-block
+					margin-bottom 0 !important
+				[class*="col-"]
+					fix_position()
+				.row
+					fix_position(1,14,14)
+					margin-left -16px !important
+					margin-right -16px !important
+					//margin-bottom 15px !important
+					[class*="col-"]
+						margin 0 !important
+		#right-content
+			padding 15px !important
+			.list-group
+				background-clip border-box !important
+				.list-group-item
+					border 1px solid lighten(active_color, 35%) !important
+					&:first-child
+						border-top-left-radius 5px !important
+						border-top-right-radius 5px !important
+					&:last-child
+						border-bottom-left-radius 5px !important
+						border-bottom-right-radius 5px !important
+
+[class*="only_"]:not([class*="_login"]):not([class*="_passwd"]):not([class*="_lgpwd"])
+	text-transform uppercase
+
+.navbar-inverse//, .navbar-default
+	background-color base_color !important
+	.navbar-nav
+		&>li>a, &>.active>a
+			&:hover, &:focus
+				hover_active()
+	.navbar-toggle
+		background-color base_color !important
+		border 1px solid #fff
+		&:hover
+			border 1px solid active_color !important
+		&:hover *
+			background-color active_color !important
+	.navbar-collapse
+		border-color transparent
+	.dropdown-menu
+		background-color base_color
+		& a
+			&:hover
+				background-color darken(active_color, 15%) !important
+#right-content .list-group-item.active,
+.navbar-inverse .navbar-nav>.open>a,
+.navbar-inverse .navbar-nav>.active>a,
+.navbar-inverse .navbar-nav .open .dropdown-menu>.active>a
+	hover_normal()
+	&:hover, &:focus
+		hover_active()
+.nav
+	li
+		&:hover, &:focus
+			background-color back_color !important
+			//box-shadow inset 0px -5px 0px #fff !important
+@media (min-width: 299px) and (max-width: 380px)
+	body #container #left-content form
+		//width 85%
+		&:not(.big-form):not(.customform)
+			width 100% !important
+		legend
+			font-size 17px
+@media (min-width: 768px)
+	body
+		#container
+			#left-content
+				.detail-card
+					.dl-horizontal
+						dt
+							width 30% !important
+						dd
+							margin-left 31% !important
+// Big form by Limber Mancilla
+$padding-bottom = 3px
+@media (max-width: 340px)
+	fix_form_fields()
+	body
+		#container
+			#left-content, #right-content
+				margin 0 !important
+				padding 0 !important
+			#right-content
+				margin-top 15px !important
+	#left-content
+		form
+			background-color #fff !important
+			margin 0 auto !important
+@media (min-width: 341px) and (max-width: 459px)
+	fix_form_fields()
+	body
+		#container
+			#left-content, #right-content
+				background-color #fff !important
+				margin 0 !important
+				padding 0 !important
+			#right-content
+				margin-top 15px !important
+	#left-content
+		padding 0 !important
+		form:not(.customform):not(.big-form)
+			width 320px !important
+		.SPbig-form
+			background-color #fff !important
+@media (min-width: 460px)
+//@media (min-width: 640px)
+	body #container #left-content form
+		&:not(.SPbig-form):not(.customform):not(.SimpleForm)
+			padding 0 !important
+	fix_form_fields()
+	#left-content
+		.big-form
+			margin 0 !important
+			padding 0 !important
+			.inner-container + .form-group
+				margin-top 15px !important
+			.inner-container
+				width 100% !important
+				margin 0 !important
+				padding 0 !important
+				.left-side, .right-side
+					background-color #fff !important
+					margin 0 !important
+					padding 15px !important
+					margin-bottom 0 !important
+					padding-bottom $padding-bottom !important
+					width 49.5% !important
+					display inline-block !important
+					vertical-align top !important
+					fix_outborder()
+				.left-side
+					top 0 !important
+					left 0 !important
+					position relative !important
+				.right-side
+					top 0 !important
+					right -5px !important
+					position relative !important
+@media(max-width: 639px)
+	fix_form_fields()
+	#left-content
+		.SPbig-form
+			background-color #fff !important
+			border-radius 5px !important
+@media (min-width: 640px)
+	body #container #left-content form
+		&.customform, &.big-form
+			padding 0 !important
+	fix_form_fields()
+	#left-content
+		.SPbig-form
+			margin 0 !important
+			padding 0 !important
+			//padding-bottom 10px !important
+			.inner-container + .form-group
+				margin-top 15px !important
+			.inner-container
+				width 100% !important
+				margin 0 !important
+				padding 0 !important
+				.left-side, .right-side
+					background-color #fff !important
+					margin 0 !important
+					padding 15px !important
+					margin-bottom 0 !important
+					padding-bottom $padding-bottom !important
+					//width 49.5% !important
+					display inline-block !important
+					vertical-align top !important
+					fix_outborder()
+				.left-side
+					width 30.5% !important
+					top 0 !important
+					left 0 !important
+					position relative !important
+					.customform
+						margin 0 auto !important
+						padding 0 !important
+				.right-side
+					padding 0 !important
+					width 68.5% !important
+					top 0 !important
+					right -5px !important
+					position relative !important
+					.fix-table
+						padding 0 !important
+// End Big form
+@media (max-width: 931px)
+	body
+		#breadcrumbs
+			margin-left 0 !important
+			margin-right 0 !important
+		#container
+			#left-content
+				margin-bottom 15px
+				float none
+			#right-content
+				margin-top 15px
+				float none
+				z-index -1
+				.list-group
+					text-align center
+					margin-bottom 0
+			&::after
+				fix_after_container()
+@media (min-width: 932px)
+	body
+		#breadcrumbs
+			margin-left 15px !important
+			margin-right 15px !important
+		#container
+			#left-content
+				float left !important
+				margin-left 15px
+				width 75% !important
+				margin-bottom 15px
+			#right-content
+				float right !important
+				margin-right 15px !important
+				top 0 !important
+				right 0 !important
+				position absolute !important
+				width 21.4% !important
+				.list-group
+					text-align right
+					margin-bottom 0
+			&::after
+				fix_after_container(25)
+@media (min-width: 1260px)
+	body #container
+		#right-content
+			width 22% !important
+@media (min-width: 1560px)
+	body #container
+		#right-content
+			width 22.5% !important
+#footer
+	width 100%
+	bottom 0 !important
+	position fixed
+	z-index 3
+	*
+		border-collapse 0
+		border-spacing 0
+		margin 0 auto
+		padding 0
+		text-align center
+		vertical-align bottom
+	&::before, &::after
+		content ""
+		display table
+	&::after
+		clear both
+	&>.foot-container
+		padding-top 2px
+		width 100%
+		height 25px
+		background-color base_color
+		color #fff
+		overflow hidden
+	.text-muted
+		color #fff
+select
+	&.form-control
+		padding-left 2px !important
+		width 99.8% !important
+	&.input-sm
+		line-height 16px !important
+.form-control
+	padding-left 5px !important
+	padding-right 2px !important
+.has-feedback
+	.form-control
+		padding-right 0 !important
+	&~.form-control-feedback
+		right 0 !important
+.link, a
+	cursor pointer
+	color darken(#5bc0de, 15%)//color #088DA5
+	&:hover, &:focus
+		color darken(#5bc0de, 30%)//color #0697ff
+		text-decoration underline
+.input-group-addon
+	padding 8px 10px
+	font-size 14px
+.dataTables_scrollHeadInner
+	tr
+		&:first-child
+			font-size 16px
+			background-color saturate(base_color,25%)
+			fix_colorText()
+			th
+				border none !important
+		&:last-child
+			font-size 12px
+			background-color saturate(active_color,25%)
+			fix_colorText()
+			th
+				border-top none !important
+				border-bottom none !important
+.table
+	thead
+		tr
+			th
+				text-align center !important
+				vertical-align top !important
+				input[type="checkbox"]
+					&::after
+						border 2px solid #fff
+					&:checked::after
+						border 2px solid base_color
+						background-color base_color
+
+[id$="_wrapper"]
+	.row:nth-child(1)
+		[class*="col-xs-"]:last-child
+			padding-right 17px !important
+		.myfilter
+			max-width 140px !important
+	.row:nth-child(2)
+		margin-bottom 15px !important
+		tbody
+			.info
+				background-color #fdfea5 !important
+			.warning
+				background-color #fedba5 !important
+			.danger
+				background-color #fea5a5 !important
+			tr
+				td
+					height 31.818px !important
+					vertical-align middle !important
+					padding 3px !important
+	.row:nth-child(3)
+		background-color darken(#fff, 15%) !important
+		// margin-top 15px !important
+		// margin-bottom -15px !important
+		// padding 0 !important
+		border-bottom-left-radius 5px !important
+		border-bottom-right-radius 5px !important
+		[class*="col-sm-"]
+			background-color transparent !important
+			display flex !important
+			&:first-child
+				border-bottom-left-radius 5px !important
+				div.dataTables_paginate
+					text-align left !important
+					ul
+						vertical-align top !important
+						& *
+							border-collapse collapse
+							border-spacing -1px !important
+							margin 0 !important
+						[id$="_first"], [id$="_previous"], [id$="_next"], [id$="_last"]
+							a
+								font-family: FontAwesome;
+								display: inline;
+						[id$="_first"] a
+							&:before
+								content "\f048"
+						[id$="_previous"] a
+							&:before
+								content "\f04a"//"\f053"
+								margin-left -5px !important
+						[id$="_next"] a
+							&:before
+								content "\f04e"//"\f054"
+								margin-right -5px !important
+						[id$="_last"] a
+							&:before
+								content "\f051"
+			&:nth-child(2)
+				white-space nowrap
+				vertical-align top !important
+				padding-bottom 1px !important
+				//padding-right 0 !important
+				label
+					margin 0 !important
+					padding 0 !important
+					top -1px !important
+					position relative !important
+				select
+					top -1px !important
+					position relative !important
+					padding 0 !important
+					width 51px !important
+					height 18px !important
+			&:nth-child(3)
+				border-bottom-right-radius 5px !important
+				justify-content flex-end !important
+				.dataTables_info
+					padding 3px 0 !important
+					white-space nowrap
+					vertical-align top !important
+					font-size 12px !important
+@media (-webkit-min-device-pixel-ratio:0)
+	[id$="_wrapper"]
+		.row:nth-child(3)
+			[class*="col-sm-"]
+				&:nth-child(2)
+					padding-bottom 0 !important
+					select
+						top -1px !important
+@media (max-width: 767px)
+	[id$="_wrapper"]
+		.row:nth-child(3)
+			margin-bottom -15px !important
+			[class*="col-sm-"]
+				display inline-block !important
+				&:first-child
+					width 100% !important
+				&:nth-child(2)
+					padding-top 0 !important
+					top 1px !important
+					position relative !important
+				&:nth-child(3)
+					.dataTables_info
+						padding-bottom 0 !important
+@media (max-width: 767px) and (-webkit-min-device-pixel-ratio:0)
+	[id$="_wrapper"]
+		.row:nth-child(3)
+			[class*="col-sm-"]
+				&:nth-child(2)
+					padding-top 0 !important
+					top 2px !important
+					position relative !important
+				&:nth-child(3)
+					padding 2px 15px !important
+// End dataTables
+.rowBox
+	width 100% !important
+	text-align center
+	display flex !important
+	flex-flow row wrap !important
+	justify-content space-between !important
+	.inner-box
+		display flex !important
+		flex-flow row wrap !important
+		justify-content space-around !important
+		fixBoxCard(100%, 5, 1px)
+		// height @width
+		color #fff
+		text-shadow darken(@color,45%) 0px 0px 1px
+		padding 15px !important
+		border-radius 5px
+		// display inline-block
+		// &::after
+		// 	content ''
+		// 	position absolute
+		// 	width 13%
+		// 	height 25%
+		// 	margin -98px 0 0 -68px
+		// 	border-radius 50%
+		// 	box-shadow 0 0 0 5px rgba(111,148,182,0.5)
+		make_transition(50,ease-in,true)
+		.number
+			vertical-align middle
+			font-size 20px !important
+		p
+			// bottom -15px !important
+			margin 5px 0 0
+			// position relative
+			width 100%
+			font-size 14px
+		&:first-child
+			background-color #1f8dd6
+			makeBorder()
+			hoverBoxCard(15)
+			.badge
+				fixBadge()
+		&:nth-child(2)
+			background-color rgb(128, 88, 165)
+			makeBorder()
+			hoverBoxCard(15)
+			.badge
+				fixBadge()
+		&:nth-child(3)
+			background-color rgb(243, 123, 29)
+			makeBorder()
+			hoverBoxCard(15)
+			.badge
+				fixBadge()
+		&:nth-child(4)
+			background-color darken(#5eb95e,10%)
+			makeBorder()
+			hoverBoxCard(15)
+			.badge
+				fixBadge()
+		&:last-child
+			//background-color darken(rgb(250, 210, 50),10%)
+			background-color lighten(#407975,10%)
+			makeBorder()
+			hoverBoxCard(15)
+			.badge
+				fixBadge()
+@media (max-width: 639px)
+	.rowBox
+		display flex !important
+		flex-flow row wrap !important
+		justify-content space-around !important
+		.inner-box
+			display flex !important
+			align-items center !important
+			flex-direction column !important
+			// flex-flow row wrap !important
+			// justify-content space-between !important
+			fixBoxCard(100%, 2, 1px)
+			margin-bottom 15px !important
+			&:last-child
+				width 100% !important
+				margin-bottom 0px !important
+@media (-webkit-min-device-pixel-ratio:0)
+	.rowBox
+		.inner-box
+			.badge
+				line-height 58px !important
+.tooltip
+	&.bottom
+		margin-top -1px !important
+	$color = active_color//#f04124
+	$opacity = .8
+	.tooltip-arrow
+		border-bottom-color $color !important
+		opacity $opacity
+	.tooltip-inner
+		background-color $color !important
+		font-size 11px !important
+		text-shadow darken($color,65%) 0px 0px 1px
+		opacity $opacity
+.projname
+	font-weight bold
+	text-shadow -1px -1px 0px #777,	-2px -2px 1px #666,	-3px -3px 2px #555,	1px 1px 5px #ccc, 2px 2px 5px #ccc,	3px 3px 5px #ccc
+.navbar-brand
+	margin 0 !important
+	padding 0 !important
+	padding-right 5px !important
+	*
+		display inline-block
+		float left
+	img
+		margin-top 1px !important
+		width auto
+		height 42px
+	a
+		color #fff !important
+		text-decoration none !important
+		font-weight bold
+		margin-top 11px !important
+		margin-left -5px !important
+button::-moz-focus-inner, input::-moz-focus-inner
+	border 0
+	padding 0
+[class*="c_select"], option
+	appearance none !important
+
+[class*="c_select"]
+	margin 0
+	padding 0
+	outline none
+	display inline-block
+	overflow hidden
+	background rgba(0,0,0,0)
+	width 100%
+	padding .01rem 1.75rem .01rem .75rem
+	vertical-align middle
+	background-image none \9
+	background transparent url("data:image/svg+xml;base64,PHN2ZyB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgaGVpZ2h0PSI1LjY0NDRtbSIgd2lkdGg9IjQuNTE1Nm1tIiB2ZXJzaW9uPSIxLjEiIHhtbG5zOmNjPSJodHRwOi8vY3JlYXRpdmVjb21tb25zLm9yZy9ucyMiIHhtbG5zOmRjPSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyIgdmlld0JveD0iMCAwIDE1Ljk5OTk5OSAyMCI+CiA8ZyBmaWxsPSIjMWExYTFhIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtMzY0LjA1IC01MTYuMTgpIj4KICA8cGF0aCBkPSJtOC4wMDIgMC4zMDQ2OWwtNy45NDkzIDcuNDYyOWgxNS44OTRsLTcuOTQ1LTcuNDYyOXptLTcuOTQ5MyAxMS44NTlsNy45NDkzIDcuNDYzIDcuOTQ1LTcuNDYzaC0xNS44OTR6IiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDM2NC4wNSA1MTYuMTgpIiBmaWxsPSIjMWExYTFhIi8+CiA8L2c+Cjwvc3ZnPgo=") no-repeat right .75rem center
+	background-size 8px 10px
+
+input[type="checkbox"]
+	appearance none !important
+	box-sizing border-box !important
+	padding 0
+	position relative
+	vertical-align -2px
+	&, &:not(:checked)
+		user-select none
+		appearance none !important
+		border none
+		cursor pointer
+		clip rect(0, 0, 0, 0)
+		pointer-events auto
+		outline none
+		border-color transparent
+		border-style none
+	&::after
+		display block
+		content ""
+		border 2px solid active_color
+		width 14px
+		height 14px
+	&:checked
+		&::before
+			content ""
+			position absolute
+			display block
+			width 1.250rem
+			height 1.250rem
+			background url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gR2VuZXJhdG9yOiBBZG9iZSBJbGx1c3RyYXRvciAxNy4xLjAsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyBWZXJzaW9uOiA2LjAwIEJ1aWxkIDApICAtLT4NCjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+DQo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9IkxheWVyXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSIwIDAgOCA4IiBlbmFibGUtYmFja2dyb3VuZD0ibmV3IDAgMCA4IDgiIHhtbDpzcGFjZT0icHJlc2VydmUiPg0KPHBhdGggZmlsbD0iI0ZGRkZGRiIgZD0iTTYuNCwxTDUuNywxLjdMMi45LDQuNUwyLjEsMy43TDEuNCwzTDAsNC40bDAuNywwLjdsMS41LDEuNWwwLjcsMC43bDAuNy0wLjdsMy41LTMuNWwwLjctMC43TDYuNCwxTDYuNCwxeiINCgkvPg0KPC9zdmc+DQo=") no-repeat center center
+			background-size 99% 99%
+		&::after
+			border 2px solid #0d87e9
+			background-color #0d87e9

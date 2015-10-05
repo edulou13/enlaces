@@ -1,0 +1,37 @@
+<%inherit file="../base.html"/>
+<%block name="header_section">
+	<script type="text/javascript" src="${static_url('js/apps/townships/newTownship.min.js')}"></script>
+</%block>
+<%block name="breadcrumbs">
+	<ul id="breadcrumbs" class="breadcrumb">
+		<li><a href="/">Inicio</a></li>
+		<li><a href="#" class="networks">Redes de Salud</a></li>
+		<li><a href="#" class="back">Red: ${red}</a></li>
+		<li class="active">Nuevo Municipio</li>
+	</ul>
+</%block>
+<%block name="left_content">
+	<form class="SimpleForm">
+		${xsrf_form_html()}
+		<input type="hidden" name="id_red" value="${red.id_red}" readonly>
+		<legend>Nuevo Municipio</legend>
+		<div class="row">
+			<div class="form-group col-sm-5">
+				<label for="inputDpto">Departamento:</label>
+				<select name="dpto" id="inputDpto" class="form-control input-sm c_select" required></select>
+			</div>
+			<div class="form-group has-feedback col-sm-7">
+				<label for="inputNombre">Nombre:</label>
+				<input type="text" name="nombre" id="inputNombre" class="form-control input-sm only_g_names" required>
+				<span class="form-control-feedback"></span>
+			</div>
+		</div>
+		<div class="comunidades">
+			<legend>Comunidades&nbsp;<a href="#" id="del" class="btn btn-xs btn-danger"><span title="Remover Último" class="fa fa-times"></span></a>&nbsp;<a href="#" id="add" class="btn btn-xs btn-info"><span class="fa fa-plus" title="Adicionar Comunidad"></span></a></legend>
+		</div><br/>
+		<div class="form-group">
+			<button type="button" class="back btn btn-sm btn-warning">Regresar</button>
+			<button type="submit" class="btn btn-sm btn-primary">Guardar</button>
+		</div>
+	</form>
+</%block>

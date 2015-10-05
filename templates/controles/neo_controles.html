@@ -1,0 +1,75 @@
+<%inherit file="../base.html"/>
+<%block name="header_section">
+	<link href="${static_url('css/dataTables.bootstrap.min.css')}" rel="stylesheet" media="all">
+	<script type="text/javascript" charset="iso-8859-1" src="${static_url('js/jquery.dataTables.min.js')}"></script>
+	<script type="text/javascript" src="${static_url('js/dataTables.bootstrap.min.js')}"></script>
+	<script type="text/javascript" src="${static_url('js/customPaginator.min.js')}"></script>
+	<script type="text/javascript" src="${static_url('js/apps/controls/neoControls.min.js')}"></script>
+</%block>
+<%block name="breadcrumbs">
+	<ul id="breadcrumbs" class="breadcrumb" data-key='{"id_per":${neo.embarazo.embarazada.id_per},"id_emb":${neo.embarazo.id_emb},"id_rcn":${neo.id_rcn},"id_def":${neo.defuncion.id_def if neo.defuncion else -1}}'>
+		<li><a href="/">Inicio</a></li>
+		<li><a href="/embarazadas/gestion">Embarazadas</a></li>
+		<li><a href="#" class="back">Madre: ${neo.embarazo.embarazada}</a></li>
+		<li class="active">Controles</li>
+	</ul>
+</%block>
+<%block name="left_content">
+	<% suff = lambda sexo: '{}'.format('a' if sexo=='f' else 'o') %>
+	<div class="detail-card">
+		<div class="row">
+			<div class="col-sm-12">
+				<dl class="dl-horizontal">
+					<dt>${'Recién Nacid{}:'.format(suff(neo.sexo))}</dt>
+					<dd>${neo}</dd>
+					<dt>Fecha de Nacimiento:</dt>
+					<dd>${to_ddmmyy(neo.f_nac)}</dd>
+					<dt>Peso:</dt>
+					<dd>${'{} kilogramo(s)'.format(neo.peso)}</dd>
+					<dt>Sexo:</dt>
+					<dd>${"Femenino" if neo.sexo=="f" else "Masculino"}</dd>
+					<dt>Estado:</dt>
+					<dd>${"Habilitad{}".format(suff(neo.sexo)) if(not neo.defuncion) else "Advertencia" if(neo.defuncion and not neo.defuncion.f_conf) else "Fallecid{}".format(suff(neo.sexo))}</dd>
+				</dl>
+			</div>
+		</div>
+	</div>
+	<div class="btn-actions">
+		<a href="#" class="back btn btn-sm btn-warning">Regresar</a>
+		<a href="#" class="edit btn btn-sm btn-primary">Editar</a>
+		% if not neo.defuncion:
+			<a href="#" class="death btn btn-sm btn-danger">Defunción</a>
+		% else:
+			<a href="#" class="confirmDeath btn btn-sm btn-danger">Defunción</a>
+		% endif
+	</div>
+	<div class="fix-table">
+		<table id="custom" class="table table-hover table-bordered" width="99.8%" cellspacing="0">
+			<thead>
+				<tr>
+					<th colspan="4" class="text-center">Controles ${'{}'.format('de la' if neo.sexo=='f' else 'del')} Recién ${'Nacid{}'.format(suff(neo.sexo))}</th>
+				</tr>
+				<tr>
+					<th>Tipo</th>
+					<th>Control</th>
+					<th>Fecha</th>
+					<th>Asistido</th>
+				</tr>
+			</thead>
+			<tbody>
+				% for ct in controles:
+					<tr>
+						<td>${ct.tipo}</td>
+						<td>${ct.nro_con}</td>
+						<td>${'{}'.format(to_ddmmyy(ct.fecha_con))}</td>
+						% if ct.asistido:
+							<td>Asistido</td>
+						% else:
+							<td><a href="/controles/control_asistencia?id_cnt=${ct.id_cnt}">Pendiente</a></td>
+						% endif
+					</tr>
+				% endfor
+			</tbody>
+		</table>
+	</div>
+</%block>

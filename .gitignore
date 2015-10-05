@@ -1,0 +1,6 @@
+# General
+#*.ini
+*.pyc
+*.bat
+*.mp3
+*.wav

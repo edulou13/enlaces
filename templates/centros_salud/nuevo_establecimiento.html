@@ -1,0 +1,42 @@
+<%inherit file="../base.html"/>
+<%block name="header_section">
+	<script type="text/javascript" src="${static_url('js/apps/hospitals/newHospital.min.js')}"></script>
+</%block>
+<%block name="breadcrumbs">
+	<ul id="breadcrumbs" class="breadcrumb" data-key='{"red":${com.municipio.red_salud.id_red},"mup":${com.municipio.id_mup},"com":${com.id_com}}'>
+		<li><a href="/">Inicio</a></li>
+		<li><a href="#" class="networks">Redes de Salud</a></li>
+		<li><a href="#" class="net">Red: ${com.municipio.red_salud}</a></li>
+		<li><a href="#" class="mup">Municipio: ${com.municipio}</a></li>
+		<li><a href="#" class="back">Comunidad: ${com}</a></li>
+		<li class="active">Nuevo Establecimiento de Salud</li>
+	</ul>
+</%block>
+<%block name="left_content">
+	<form class="SimpleForm key" data-key='${dumps([dict(id=cm.id_com,nombre=cm.nombre) for cm in com.municipio.comunidades if cm.activo and cm != com])}'>
+		${xsrf_form_html()}
+		<input type="hidden" name="id_com" value="${com.id_com}" readonly>
+		<legend>Nuevo Establecimiento</legend>
+		<div class="row">
+			<div class="form-group col-sm-6">
+				<label for="inputTipo">Tipo:</label>
+				<select name="tipo" id="inputTipo" class="form-control input-sm c_select" required></select>
+			</div>
+			<div class="form-group has-feedback col-sm-6">
+				<label for="inputNombre">Nombre:</label>
+				<input type="text" name="nombre" id="inputNombre" class="form-control input-sm only_g_names" required>
+				<span class="form-control-feedback"></span>
+			</div>
+		</div>
+		<div id="comunidades">
+			<legend>Asignar Comunidades para Atención</legend>
+		</div><br>
+		<div id="prestaciones">
+			<legend>Asignar Prestaciones al Establecimiento de Salud</legend>
+		</div><br>
+		<div class="form-group">
+			<button type="button" class="back btn btn-sm btn-warning">Regresar</button>
+			<button type="submit" class="btn btn-sm btn-primary">Guardar</button>
+		</div>
+	</form>
+</%block>

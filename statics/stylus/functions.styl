@@ -1,0 +1,77 @@
+make_transition($time=240, $effect=ease, $important=false)
+	//transition all ($time)ms ease
+	if $important
+		transition all ($time)ms $effect !important
+	else
+		transition all ($time)ms $effect
+fix_colorText()
+	if dark(@background-color)
+		color lighten(@background-color,90%)
+	else
+		color darken(@background-color, 90%)
+
+fix_position(fheight=1, fleft=2, fright=2)
+	position relative
+	min-height (fheight)px
+	padding-left (fleft)px
+	padding-right (fright)px
+
+fix_after_container(bmargin=35)
+	content ""
+	margin-bottom (bmargin)px !important
+	display table
+	clear both
+
+fix_outborder($alpha=.13)
+	border-radius 5px !important
+	box-shadow rgba(255,255,255,$alpha) 0px 0px 0px 1px !important
+
+hover_normal()
+	color #fff
+	border-color transparent
+	background-color active_color !important
+	box-shadow inset 0px -5px 0px #fff !important
+
+hover_active()
+	color #fff
+	border-color transparent
+	background-color darken(active_color, 15%) !important
+	box-shadow inset 0px -5px 0px #fff !important
+
+fix_pagination()
+	background-color base_green
+	color #fff
+	border-color transparent
+
+fixBoxCard($w=100%, $part=4, $pad=1px)
+	width (($w/$part) - $pad) !important
+
+makeBorder()
+	box-shadow inset lighten(@background-color,25%) 0px 0px 0px 2px
+
+hoverBoxCard($dark=10)
+	&:hover
+		// makeBorder()
+		box-shadow inset 0px -5px 0px #fff !important
+		background-color darken(@background-color, ($dark)%)
+	&:active
+		// makeBorder()
+		transform scale(.98)
+
+fixBadge()
+	min-width 64px
+	height 64px
+	// vertical-align top
+	line-height 56px
+	border-radius 50%
+	color @background-color
+	background-color #fff
+	box-shadow 0 0 5px #fff
+
+fix_form_fields()
+	body #container form .row
+		&:not(:last-child)
+			margin-top 0 !important
+			margin-bottom 5px !important
+		.form-group, [class*='col-']
+			margin-bottom 15px !important

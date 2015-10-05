@@ -1,0 +1,78 @@
+<%inherit file="../base.html"/>
+<%block name="header_section">
+	<style type="text/css" media="all">
+		@media (min-width: 361px) {
+			#container {
+				height: 78%!important;
+				display: -webkit-box;
+				display: -webkit-flex;
+				display: -moz-box;
+				display: -ms-flexbox;
+				display: flex;
+				-webkit-box-align: center;
+				-webkit-align-items: center;
+				   -moz-box-align: center;
+				    -ms-flex-align: center;
+				        align-items: center;
+				-webkit-box-pack: center;
+				-webkit-justify-content: center;
+				   -moz-box-pack: center;
+				    -ms-flex-pack: center;
+				        justify-content: center;
+			}
+		}
+		body #container form:not(.big-form) {
+			min-width: 280px!important;
+			width: 300px!important;
+			/*margin: auto;*/
+			padding-left: 30px;
+			padding-right: 30px;
+			padding-top: 15px;
+			padding-bottom: 15px;
+			background-color: white;
+			-webkit-border-radius: 5px;
+			        border-radius: 5px;
+		}
+		@media (min-width: 299px) and (max-width: 360px) {
+			body #container form:not(.big-form) {
+				width: 100%!important;
+			}
+		}
+		#alertLogin{
+			margin:  15px 0!important;
+			margin-top: 0!important;
+			display: none;
+		}
+	</style>
+	<script type="text/javascript" src="${static_url('js/apps/login.min.js')}"></script>
+</%block>
+<%block name="user_actions"/>
+<%block name="content">
+	##<div>
+		<form>
+			${xsrf_form_html()}
+			<legend>Inciar Sesión</legend>
+			<fieldset class="form-group">
+				<label for="inputLogin">Usuario:</label>
+				<input type="text" name="login" id="inputLogin" class="form-control input-sm">
+			</fieldset>
+			<fieldset class="form-group">
+				<label for="inputPasswd">Contraseña:</label>
+				<input type="password" name="passwd" id="inputPasswd" class="form-control input-sm">
+			</fieldset>
+			<div class="alert-Box">
+				<div id="alertLogin" class="alert alert-danger alert-dismissible">
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					Usuario o Contraseña incorrectos!
+				</div>
+			</div>
+			<div class="clear-fix"></div>
+			<fieldset class="form-group">
+				<button type="submit" class="btn btn-sm btn-primary btn-block">Ingresar</button>
+			</fieldset>
+		</form>
+	##</div>
+	##<div class="clear-fix"></div>
+</%block>

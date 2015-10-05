@@ -1,0 +1,257 @@
+##-*- coding: utf-8 -*-
+<%page cached="True"/>
+<!DOCTYPE html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="es"><![endif]-->
+<!--[if IE 7]><html class="no-js lt-ie9 lt-ie8" lang="es"><![endif]-->
+<!--[if IE 8]><html class="no-js lt-ie9" lang="es"><![endif]-->
+<!--[if gt IE 8]><!--><html class="no-js" lang="es"><!--<![endif]-->
+	<head>
+		<%block cached="True" cache_type="memory">
+			<meta charset="utf-8">
+			<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+			<meta name="viewport" content="width=device-width, initial-scale=1">
+			<meta name="google" content="notranslate">
+			<title>Enlaces</title>
+			<link rel="shortcut icon" href="${static_url('favicon.ico')}" type="image/x-icon">
+			<link href="${static_url('css/bootstrap.min.css')}" rel="stylesheet" media="all">
+			<link href="${static_url('css/custom.min.css')}" rel="stylesheet" media="all">
+			<link href="${static_url('css/dropdowns-enhancement.min.css')}" rel="stylesheet" media="all">
+			<script src="${static_url('js/modernizr-2.8.3-respond-1.4.2.min.js')}"></script>
+			<!--[if lt IE 9]><script src="${static_url('js/jquery-1.11.3.min.js')}"></script><![endif]-->
+			<!--[if gt IE 8]><!--><script src="${static_url('js/jquery-2.1.4.min.js')}"></script><!--<![endif]-->
+			<script src="${static_url('js/shortcuts.min.js')}"></script>
+			<script src="${static_url('js/bootstrap.min.js')}"></script>
+			<script src="${static_url('js/dropdowns-enhancement.min.js')}"></script>
+			<script type="text/javascript" class="test">
+				$(function(){
+					window.history.pushState("string", "Title", "/");
+					var strWindowFeatures = "menubar=no,location=no,resizable=yes,scrollbars=yes,status=no,replace=true";
+					$('.navbar, #breadcrumbs, .btn-actions, #right-content, .help-menu').find('a').each(function(){
+						var olink = $(this);
+						olink.data('link', olink.attr('href')).removeAttr('href').on({
+							click:function(e){
+								e.preventDefault();
+								var cur_link = $(this);
+								if(cur_link.hasClass('popup')){
+									window.open(cur_link.data('link'), strWindowFeatures);
+								}
+								else if(!cur_link.hasClass('pdfpopup')){
+									location.href = cur_link.data('link');
+								} else {
+									if(oBrowser && ((oBrowser.app=='Chrome' && oBrowser.ver>=45) || (oBrowser.app=='Opera' && oBrowser.ver>=32))){
+										window.open(cur_link.data('link'), strWindowFeatures);
+									} else {
+										window.open('/viewerpdf?file={0}'.format(cur_link.data('link')), strWindowFeatures);
+									}
+								}
+							}
+						});
+					});
+				});
+			</script>
+		</%block>
+		<%block name="header_section"/>
+	</head>
+	<body>
+		<%block cached="True" cache_type="memory">
+			<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+				<div class="navbar-header">
+					% if current_user:
+						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+							<span class="sr-only">Toggle navigation</span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+					% endif
+					<div class="navbar-brand">
+						<img src="${static_url('brand_logo.svg')}">
+						<a href='/'>Enlaces</a>
+					</div>
+				</div>
+				<div class="navbar-collapse collapse navbar-ex1-collapse">
+					<%block name="menu">
+						<ul class="nav navbar-nav">
+							% if current_user and current_user.rol in [u'Administrador',u'Operador de Registro','Operador de Radio']:
+								<li class="pregnant-menu"><a href="/embarazadas/gestion"><i class="fa fa-female"></i>&nbsp;Mujeres</a></li>
+								<li class="dropdown report-menu">
+									<a href="#" data-toggle="dropdown" class="dropdown-toggle"><i class="fa fa-line-chart"></i>&nbsp;Reportes&nbsp;<b class="caret"></b></a>
+									<ul class="dropdown-menu" rol="menu">
+										<li class="report-global"><a href="/reportes/global"><i class="fa fa-globe"></i>&nbsp;Reporte Global</a></li>
+										<li class="report-radio"><a href="/reportes/radio"><i class="fa fa-bullhorn"></i>&nbsp;Notificaiones de Radio</a></li>
+										<li class="report-catalogo"><a href="/reportes/catalogo" class="pdfpopup"><i class="fa fa-file-text"></i>&nbsp;Catálogo de Mensajes</a></li>
+									</ul>
+								</li>
+								% if current_user.rol==u'Administrador':
+									<li class="dropdown message-menu">
+										<a href="#" data-toggle="dropdown" class="dropdown-toggle"><i class="fa fa-envelope"></i>&nbsp;Mensajes&nbsp;<b class="caret"></b></a>
+										<ul class="dropdown-menu" rol="menu">
+											<li class="sms-catalog"><a href="/mensajes/gestion"><i class="fa fa-file-text"></i>&nbsp;Catálogo</a></li>
+											<li class="sms-agenda"><a href="/mensajes/agendas"><i class="fa fa-book"></i>&nbsp;Agenda</a></li>
+											<li class="sms-flash"><a href="/mensajes/sendsms"><i class="fa fa-paper-plane"></i>&nbsp;Instantáneos</a></li>
+										</ul>
+									</li>
+								% endif
+							% endif
+							% if current_user and current_user.rol==u'Administrador':
+								<li class="dropdown manager-menu">
+									<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-cog"></i>&nbsp;Administración&nbsp;<b class="caret"></b></a>
+									<ul class="dropdown-menu" rol="menu">
+										<li class="type-sub"><a href="/tipos/gestion"><i class="fa fa-child"></i>&nbsp;Tipos de Persona</a></li>
+										<li class="capability-sub"><a href="/prestaciones/gestion"><i class="fa fa-ambulance"></i>&nbsp;Tipos de prestaciones</a></li>
+										<li class="ethnic-sub"><a href="/etnias/gestion"><i class="fa fa-flag"></i>&nbsp;Pertencia Étnica</a></li>
+										<li class="health-sub"><a href="/redes_salud/gestion"><i class="fa fa-sitemap"></i>&nbsp;Redes de Salud</a></li>
+										<li class="user-sub">
+											<a href="/usuarios/gestion"><i class="fa fa-user"></i>&nbsp;Usuarios</a>
+											<ul class="dropdown-menu" rol="menu"></ul>
+										</li>
+									</ul>
+								</li>
+							% endif
+							<li class="dropdown help-menu">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-question-circle"></i>&nbsp;Ayuda&nbsp;<b class="caret"></b></a>
+								<ul class="dropdown-menu" rol="menu">
+									<li class="dropdown-submenu">
+										<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-child"></i>&nbsp;Tipos de Persona
+										</a>
+										<ul class="dropdown-menu">
+											<li><a class="popup" href="http://enlaces.org.bo/ayuda/Administracion/#11-nuevos-tipos-de-personas">Crear Nuevo Tipo de Persona</a></li>
+										</ul>
+									</li>
+									<li class="dropdown-submenu">
+										<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-ambulance"></i>&nbsp;Tipos de prestaciones
+										</a>
+										<ul class="dropdown-menu">
+											<li><a class="popup" href="http://enlaces.org.bo/ayuda/Administracion/#21-crear-nuevos-tipos-de-prestaciones" target="blank">Crear Nuevo Tipo de Prestaciones</a></li>
+										</ul>
+									</li>
+									<li class="dropdown-submenu">
+										<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-flag"></i>&nbsp;Pertencia Étnica
+										</a>
+										<ul class="dropdown-menu">
+											<li><a class="popup" href="http://enlaces.org.bo/ayuda/Administracion/#3-pertenencia-etnica">Crear Nueva Pertencia Étnica</a></li>
+											<li><a class="popup" href="http://enlaces.org.bo/ayuda/Administracion/#32-modificar-pertenencia-etnica">Modificar Pertencia Étnica</a></li>
+										</ul>
+									</li>
+									<li class="dropdown-submenu">
+										<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-sitemap"></i>&nbsp;Redes de Salud
+										</a>
+										<ul class="dropdown-menu">
+											<li><a class="popup" href="http://enlaces.org.bo/ayuda/Administracion/#41-crearmodificar-nueva-red-de-salud">Crear y Modificar Nueva Red de Salud</a></li>
+											<li><a class="popup" href="http://enlaces.org.bo/ayuda/Administracion/#43-crearmodificar-nuevo-establecimiento-de-salud">Crear y Modificar Establecimientos de Salud</a></li>
+											<li><a class="popup" href="http://enlaces.org.bo/ayuda/Administracion/#42-crearmodificar-nuevo-municipio">Crear y Modificar Municipio</a></li>
+											<li><a class="popup" href="http://enlaces.org.bo/ayuda/Administracion/#43-crearmodificar-comunidad">Crear y Modificar Comunidades</a></li>
+										</ul>
+									</li>
+									<li class="dropdown-submenu">
+										<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user"></i>&nbsp;Usuarios
+										</a>
+										<ul class="dropdown-menu">
+											<li><a class="popup" href="http://enlaces.org.bo/ayuda/Administracion/#51-adicionar-usuario">Adicionar Usuario</a></li>
+											<li><a class="popup" href="http://enlaces.org.bo/ayuda/Administracion/#52-modificar-usuario">Modificar Usuario</a></li>
+											<li><a class="popup" href="http://enlaces.org.bo/ayuda/Administracion/#53-inhabilitar-usuario">Inhabilitar Usuario</a></li>
+										</ul>
+									</li>
+									<li class="dropdown-submenu">
+										<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-female"></i>&nbsp;Mujeres
+										</a>
+										<ul class="dropdown-menu">
+											<li><a class="popup" href="http://enlaces.org.bo/ayuda/Mujeres/#11-nueva-embarazada">Nueva Embarazada</a></li>
+											<li><a class="popup" href="http://enlaces.org.bo/ayuda/Mujeres/#12-modificar-embarazada">Modificar Embarazada</a></li>
+											<li><a class="popup" href="http://enlaces.org.bo/ayuda/Mujeres/#16-defuncion-de-la-embarazada">Defuncion de Embarazada</a></li>
+											<li><a class="popup" href="http://enlaces.org.bo/ayuda/Mujeres/#13-nuevo-embarazo">Nuevo Embarazo</a></li>
+											<li><a class="popup" href="http://enlaces.org.bo/ayuda/Mujeres/#17-interrupcion-de-embarazo">Interrupcion del Embarazo</a></li>
+											<li><a class="popup" href="http://enlaces.org.bo/ayuda/Mujeres/#18-embarazos-de-riesgo">Embarazo de Riesgo</a></li>
+											<li><a class="popup" href="http://enlaces.org.bo/ayuda/Mujeres/#15-registrar-parto">Registrar Parto</a></li>
+											<li><a class="popup" href="http://enlaces.org.bo/ayuda/Administracion/#6-reprogramar-la-fecha-de-parto">Reprogramar Parto</a></li>
+											<li><a class="popup" href="http://enlaces.org.bo/ayuda/Mujeres/#14-registrar-asistencia-a-controles-embarazadasrecien-nacidos">Registrar Asistencia a Controles</a></li>
+										</ul>
+									</li>
+									<li class="dropdown-submenu">
+										<a href="#" data-toggle="dropdown" class="dropdown-toggle"><i class="fa fa-envelope"></i>&nbsp;Mensajes&nbsp;</a>
+										<ul class="dropdown-menu">
+											<li><a class="popup" href="http://enlaces.org.bo/ayuda/Administracion/#71-agenda-de-mensajes">Agenda de mensajes</a></li>
+											<li><a class="popup" href="http://enlaces.org.bo/ayuda/Administracion/#7-mensajes-de-texto">Mensajes de texto</a></li>
+											<li><a class="popup" href="http://enlaces.org.bo/ayuda/Administracion/#72-mensajes-instantaneos">Mensajes instantáneos</a></li>	
+											<li><a class="popup" href="http://enlaces.org.bo/ayuda/Administracion/#73-catalogo-de-mensajes">Catálogo de mensajes</a></li>
+										</ul>
+									</li>
+									<li class="dropdown-submenu">
+										<a href="#" data-toggle="dropdown" class="dropdown-toggle"><i class="fa fa-line-chart"></i>&nbsp;Reportes&nbsp;</a>
+										<ul class="dropdown-menu">
+											<li><a class="popup" href="http://enlaces.org.bo/ayuda/Reportes/#11-reporte-global">Reporte global</a></li>
+											<li><a class="popup" href="http://enlaces.org.bo/ayuda/Reportes/#12-notificaciones-de-radio">Reporte de Notificaciones de radio</a></li>
+											<li><a class="popup" href="http://enlaces.org.bo/ayuda/Reportes/#13-catalogo-de-mensajes">Reporte catalogo de mensajes</a></li>
+										</ul>
+									</li>
+									<li class="dropdown-submenu">
+										<a href="#" data-toggle="dropdown" class="dropdown-toggle"><i class="fa fa-bullhorn"></i>&nbsp;Operadores de Radio&nbsp;</a>
+										<ul class="dropdown-menu">
+											<li><a class="popup" href="http://enlaces.org.bo/ayuda/Radio/#12-marcar-comunicacion-como-realizada">Marcar comunicacion como realizada</a></li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</%block>
+					<ul class="nav navbar-nav navbar-right">
+					<%block name="user_actions">
+						% if current_user:
+							<li class="dropdown user-menu">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown" title="${current_user.persona}"><i class="fa fa-smile-o"></i>&nbsp;${current_user.login}&nbsp;<b class="caret"></b>&nbsp;</a>
+								<ul class="dropdown-menu" rol="menu">
+									<li class="user-profile"><a href="/usuarios/profile"><i class="fa fa-cogs"></i>&nbsp;Perfíl</a></li>
+									<li><a href="/logout"><i class="fa fa-sign-out"></i>&nbsp;Salir&nbsp;</a></li>
+								</ul>
+							</li>
+						% else:
+							<li><a href="/login"><i class="fa fa-sign-in"></i>&nbsp;Ingresar&nbsp;</a></li>
+						% endif
+					</%block>
+					</ul>
+				</div>
+			</nav>
+		</%block>
+		<%block name="breadcrumbs"/>
+		<div id="container">
+			<%block name="content">
+				<div id="left-content">
+					<%block name="left_content"/>
+				</div>
+			</%block>
+			% if current_user:
+				<div id="right-content">
+					<div class="list-group">
+						<a href="/" class="list-group-item home-menu"><i class="fa fa-home"></i>&nbsp;Inicio</a>
+						% if current_user.rol==u'Administrador':
+							<a href="/centros_salud" class="list-group-item hospitals-menu"><i class="fa fa-hospital-o"></i>&nbsp;Establecimientos</a>
+						% endif
+						<a href="/embarazadas/gestion" class="list-group-item pregnant-menu"><i class="fa fa-female"></i>&nbsp;Mujeres</a>
+						<a href="/personas/gestion" class="list-group-item persons-menu"><i class="fa fa-users"></i>&nbsp;Personas</a>
+						<a href="/reportes/global" class="list-group-item report-global"><i class="fa fa-globe"></i>&nbsp;Reporte Global</a>
+						<a href="/reportes/radio" class="list-group-item report-radio"><i class="fa fa-bullhorn"></i>&nbsp;Notificaciones de Radio</a>
+						<a href="/reportes/catalogo" class="list-group-item report-catalogo pdfpopup"><i class="fa fa-file-text"></i>&nbsp;Catálogo de Mensajes</a>
+					</div>
+				</div>
+			% endif
+		</div>
+		<%block cached="True" cache_type="memory">
+			<div id="footer" class="visible-sm visible-md visible-lg">
+				<div class="foot-container">
+					<div class="text-muted">
+						<ul class="list-inline text-center">
+							<%block name="bottom_items">
+								<li><h4><i class="fa fa-html5"></i></h4></li>
+								<li><h4><i class="fa fa-css3"></i></h4></li>
+								<li><h4><i class="fa fa-desktop"></i></h4></li>
+								<li><h4><i class="fa fa-laptop"></i></h4></li>
+								<li><h4><i class="fa fa-tablet"></i></h4></li>
+								<li><h4><i class="fa fa-mobile"></i></h4></li>
+							</%block>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</%block>
+	</body>
+</html>

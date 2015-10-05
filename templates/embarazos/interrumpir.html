@@ -1,0 +1,66 @@
+<%inherit file="../base.html"/>
+<%block name="header_section">
+	<link href="${static_url('css/datetimepicker.min.css')}" rel="stylesheet" media="all">
+	<script type="text/javascript" charset="iso-8859-1" src="${static_url('js/jasny-bootstrap.min.js')}"></script>
+	<script type="text/javascript" charset="iso-8859-1" src="${static_url('js/moment.min.js')}"></script>
+	<script type="text/javascript" src="${static_url('js/datetimepicker.min.js')}"></script>
+	<script type="text/javascript" src="${static_url('js/apps/pregnancies/pregnancyInterrupt.min.js')}"></script>
+</%block>
+<%block name="breadcrumbs">
+	<ul id="breadcrumbs" class="breadcrumb" data-key='{"id_per":${em.embarazada.id_per},"id_emb":${em.id_emb}}'>
+		<li><a href="/">Inicio</a></li>
+		<li><a href="/embarazadas/gestion">Embarazadas</a></li>
+		<li><a href="#" class="pregnant">${em.embarazada}</a></li>
+		<li><a href="#" class="back">Controles</a></li>
+		<li class="active">Interrupción del Embarazo</li>
+	</ul>
+</%block>
+<%block name="left_content">
+	<form class="SimpleForm">
+		${xsrf_form_html()}
+		<input type="hidden" name="id_emb" value="${em.id_emb}" readonly>
+		<fieldset>
+			<legend>Interrupción del Embarazo</legend>
+		</fieldset>
+		<div class="row">
+			<fieldset class="form-group has-feedback col-sm-6">
+				<label>Fecha de Interrupción:</label>
+				<input type="text" name="fecha" value="${to_ddmmyy(utc.now().date())}" class="form-control input-sm only_date" required>
+				<span class="form-control-feedback"></span>
+				<p class="help-block">Día/Mes/Año</p>
+			</fieldset>
+			<fieldset class="form-group has-feedback col-sm-6">
+				<label>Fecha de Notificación:</label>
+				<input type="text" name="f_notf" value="${to_ddmmyy(utc.now().date())}" class="form-control input-sm only_date" required>
+				<span class="form-control-feedback"></span>
+				<p class="help-block">Día/Mes/Año</p>
+			</fieldset>
+		</div>
+		<div class="form-group">
+			<label>Observación de Notificación:</label>
+			<textarea name="obs_notf" class="form-control input-sm only_comments" row="4" required></textarea>
+		</div>
+		<div class="row">
+			<fieldset class="form-group col-sm-5">
+				<label for="_confirm">Desea confirmar?</label><br>
+				<label class="radio-inline"><input type="radio" name="_confirm" id="_confirm" value="1" class="yes"> Si</label>
+				<label class="radio-inline"><input type="radio" name="_confirm" id="_confirm" value="0" class="no" checked> No</label>
+			</fieldset>
+			<fieldset class="form-group has-feedback optional col-sm-7">
+				<label>Fecha de Confirmación:</label>
+				<input type="text" name="f_conf" value="${to_ddmmyy(utc.now().date())}" class="form-control input-sm only_date" required>
+				<span class="form-control-feedback"></span>
+				<p class="help-block">Día/Mes/Año</p>
+			</fieldset>
+		</div>
+		<fieldset class="form-group optional">
+			<label>Observación de Notificación:</label>
+			<textarea name="obs_conf" class="form-control input-sm only_comments" row="4" required></textarea>
+		</fieldset>
+		<div class="clear-fix"></div>
+		<fieldset class="form-group">
+			<button type="button" id="back" class="btn btn-sm btn-warning">Regresar</button>
+			<button type="submit" class="btn btn-sm btn-primary">Guardar</button>
+		</fieldset>
+	</form>
+</%block>

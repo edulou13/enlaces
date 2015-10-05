@@ -1,0 +1,86 @@
+<%inherit file="../base.html"/>
+<%block name="header_section">
+	<link href="${static_url('css/dataTables.bootstrap.min.css')}" rel="stylesheet" media="all">
+	<script type="text/javascript" charset="iso-8859-1" src="${static_url('js/jquery.dataTables.min.js')}"></script>
+	<script type="text/javascript" src="${static_url('js/dataTables.bootstrap.min.js')}"></script>
+	<script type="text/javascript" src="${static_url('js/customPaginator.min.js')}"></script>
+	<script type="text/javascript">
+		$(function(){
+			$('.save').on({
+				click:function(e){
+					e.preventDefault();
+					var btn = $(this), agendas = $('.agenda:checked'), data = [{'name':'_xsrf', 'value':getCookie('_xsrf')}];
+					btn.disable();
+					if(agendas.length){
+						$.each(agendas, function(i, obj){
+							var $agenda = $(obj);
+							if($agenda.prop('checked')){
+								var ag = $($agenda.closest('td')).data('agenda');
+								if($.type(ag.id_agd)==='undefined'){
+									$agenda.closest('tr').css('background', 'red');
+								}
+								data.push({'name':'id_agd', 'value':ag.id_agd});
+							}
+						});
+						$.post(
+							'/radio_operador',
+							data = data,
+							function(response){
+								if(response){
+									location.href='/';
+								} else {
+									btn.enable();
+								}
+							}
+						);
+					} else {
+						btn.enable();
+					}
+				}
+			});
+			$('#radio_grid').customPaginator({sort:false});
+		});
+	</script>
+</%block>
+<%block name="breadcrumbs">
+	<ul id="breadcrumbs" class="breadcrumb">
+		<li><a href="/">Inicio</a></li>
+		<li class="active">Notificaciones de Radio</li>
+	</ul>
+</%block>
+<%block name="left_content">
+	<div class="btn-actions">
+		<button type="button" class="btn btn-sm btn-primary save">Guardar</button>
+	</div>
+	<div class="fix-table">
+		<%
+			labels = [u'Pre-Natal',u'Post-Natal',u'Promocional Pre-Natal',u'Promocional Post-Natal',u'Interrupción']
+			parse_msg = lambda msg: labels[msg.tipo - 1]
+		%>
+		<table id="radio_grid" class="table table-hover table-bordered" width="99.8%" cellspacing="0">
+			<thead>
+				<tr><th colspan="6">Notificaciones de Radio</th></tr>
+				<tr>
+					<th>Notificación<br/>Realizada</th>
+					<th>Mujer</th>
+					<th>Comunidad</th>
+					<th>Control</th>
+					<th>Tipo de Mensaje</th>
+					<th>Fecha Programada</th>
+				</tr>
+			</thead>
+			<tbody>
+				% for ag in agendas:
+					<tr>
+						<td data-agenda='{"id_agd":${ag.id_agd}}'>&nbsp;<input type="checkbox" class="agenda"></td>
+						<td>${ag.persona}</td>
+						<td>${ag.persona.comunidad}</td>
+						<td>${ag.mensaje.nro_control}</td>
+						<td>${parse_msg(ag.mensaje)}</td>
+						<td>${to_ddmmyy(ag.fecha_con)}</td>
+					</tr>
+				% endfor
+			</tbody>
+		</table>
+	</div>
+</%block>

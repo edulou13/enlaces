@@ -1,0 +1,61 @@
+<%inherit file="../base.html"/>
+<%block name="header_section">
+	<link href="${static_url('css/datetimepicker.min.css')}" rel="stylesheet" media="all">
+	<script type="text/javascript" src="${static_url('js/shortcuts.min.js')}"></script>
+	<script type="text/javascript" charset="iso-8859-1" src="${static_url('js/jasny-bootstrap.min.js')}"></script>
+	<script type="text/javascript" charset="iso-8859-1" src="${static_url('js/moment.min.js')}"></script>
+	<script type="text/javascript" src="${static_url('js/datetimepicker.min.js')}"></script>
+	<script type="text/javascript" src="${static_url('js/apps/controls/neoDeathConfirm.min.js')}"></script>
+</%block>
+<%block name="breadcrumbs">
+	<% neo = death.recien_nacido %>
+	<ul id="breadcrumbs" class="breadcrumb" data-key='{"id_per":${neo.embarazo.embarazada.id_per},"id_emb":${neo.embarazo.id_emb},"id_rcn":${neo.id_rcn},"id_def":${death.id_def},"done":${1 if death.f_conf else 0}}'>
+		<li><a href="/">Inicio</a></li>
+		<li><a href="/embarazadas/gestion">Embarazadas</a></li>
+		<li><a href="#" class="pregnant">Madre: ${neo.embarazo.embarazada}</a></li>
+		<li><a href="#" class="back">${'Recién Nacid{}'.format('a' if neo.sexo=='f' else 'o')}: ${neo}</a></li>
+		<li class="active">Confirmar de Defunción</li>
+	</ul>
+</%block>
+<%block name="left_content">
+	<form class="SimpleForm">
+		${xsrf_form_html()}
+		<input type="hidden" name="id_def" value="${death.id_def}" readonly>
+		<legend>Registro de Defunción</legend>
+		<div class="row optional">
+			<fieldset class="form-group col-sm-6">
+				<label>Fecha de Defunción:</label>
+				<label class="form-control input-sm" disabled>${to_ddmmyy(death.fecha)}</label>
+				<p class="help-block">Día/Mes/Año</p>
+			</fieldset>
+			<fieldset class="form-group has-feedback col-sm-6">
+				<label>Fecha de Notificación:</label>
+				<label for="" class="form-control input-sm" disabled>${to_ddmmyy(death.f_notf)}</label>
+				<span class="form-control-feedback"></span>
+				<p class="help-block">Día/Mes/Año</p>
+			</fieldset>
+		</div>
+		<fieldset class="form-group optional">
+			<label>Observación de Notificación:</label>
+			<textarea class="form-control input-sm" row="4">${death.obs_notf}</textarea>
+		</fieldset>
+		<fieldset class="form-group has-feedback">
+			<label>Fecha de Confirmación:</label>
+			<input type="text" name="f_conf" value="${to_ddmmyy(death.f_notf) if death.f_notf else ''}" class="form-control input-sm only_date" required>
+			<span class="form-control-feedback"></span>
+			<p class="help-block">Día/Mes/Año</p>
+		</fieldset>
+		<fieldset class="form-group">
+			<label>Observación de Notificación:</label>
+			<textarea name="obs_conf" class="form-control input-sm only_comments" row="4" required>${'{}'.format(death.obs_conf or '')}</textarea>
+		</fieldset>
+		<div class="clear-fix"></div>
+		<fieldset class="form-group">
+			<button type="button" class="back btn btn-sm btn-warning">Regresar</button>
+			% if not death.f_conf:
+				<button type="button" class="delete btn btn-sm btn-danger">Eliminar</button>
+				<button type="submit" class="btn btn-sm btn-primary">Confirmar</button>
+			% endif
+		</fieldset>
+	</form>
+</%block>

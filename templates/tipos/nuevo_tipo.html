@@ -1,0 +1,32 @@
+<%inherit file="../base.html"/>
+<%block name="header_section">
+	<link href="${static_url('css/sweet-alert.min.css')}" rel="stylesheet" media="all">
+	<script type="text/javascript" charset="iso-8859-1" src="${static_url('js/sweet-alert.min.js')}"></script>
+	<script type="text/javascript" src="${static_url('js/apps/categories/newCategory.min.js')}"></script>
+</%block>
+<%block name="breadcrumbs">
+	<ul id="breadcrumbs" class="breadcrumb">
+		<li><a href="/">Inicio</a></li>
+		<li><a href="#" class="back">Tipos de Personas</a></li>
+		<li class="active">Nuevo Tipo</li>
+	</ul>
+</%block>
+<%block name="left_content">
+	<form class="SimpleForm">
+		${xsrf_form_html()}
+		<legend>Nuevo Tipo</legend>
+		<div class="form-group has-feedback">
+			<label for="inputNombre">Nombre:</label>
+			<input type="text" name="nombre" id="inputNombre" class="form-control input-sm only_profession" required>
+			<span class="form-control-feedback"></span>
+		</div>
+		<div class="form-group">
+			<label for="inputDescrip">Descripción:</label>
+			<textarea class="form-control input-sm only_comments" name="descrip" id="inputDescrip"></textarea>
+		</div>
+		<div class="form-group">
+			<button type="button" class="btn btn-sm btn-warning">Regresar</button>
+			<button type="submit" class="btn btn-sm btn-primary">Guardar</button>
+		</div>
+	</form>
+</%block>

@@ -1,0 +1,55 @@
+<%inherit file="../base.html"/>
+<%block name="header_section">
+	<script type="text/javascript" src="${static_url('js/shortcuts.min.js')}"></script>
+	<script type="text/javascript" src="${static_url('js/apps/controls/neoUpdate.min.js')}"></script>
+</%block>
+<%block name="breadcrumbs">
+	<ul id="breadcrumbs" class="breadcrumb" data-key='{"id_per":${neo.embarazo.embarazada.id_per},"id_rcn":${neo.id_rcn},"str":"${neo.__str__()}"}'>
+		<li><a href="/">Inicio</a></li>
+		<li><a href="#" class="pregnants">Embarazadas</a></li>
+		<li><a href="#" class="pregnant">Madre: ${neo.embarazo.embarazada}</a></li>
+		<li><a href="#" class="back">Controles</a></li>
+		<li class="active">Modificar</li>
+	</ul>
+</%block>
+<%block name="left_content">
+	<form class="SimpleForm">
+		${xsrf_form_html()}
+		<input type="hidden" name="id_rcn" value="${neo.id_rcn}" readonly>
+		<legend>Modificar Datos</legend>
+		<div class="row">
+			<fieldset class="form-group has-feedback col-sm-6">
+				<label>Nombres:</label>
+				<input type="text" name="nombres" value="${'{}'.format(neo.nombres or '')}" class="form-control input-sm only_p_names" required>
+			</fieldset>
+			<fieldset class="form-group has-feedback col-sm-6">
+				<label>Apellidos:</label>
+				<input type="text" name="apellidos" value="${neo.apellidos}" class="form-control input-sm only_p_lastnames" required>
+			</fieldset>
+		</div>
+		<div class="row">
+			<fieldset class="form-group has-feedback col-sm-6">
+				<label>Sexo:</label>
+				<select name="sexo" class="form-control input-sm c_select" required>
+					<option value="-1">-- Elija Uno --</option>
+					<option value="f" ${"selected" if neo.sexo=="f" else ""}>Femenino</option>
+					<option value="m" ${"selected" if neo.sexo=="m" else ""}>Masculino</option>
+				</select>
+			</fieldset>
+			<fieldset class="form-group has-feedback col-sm-6">
+				<label>Peso:</label>
+				<input type="text" name="peso" value="${neo.peso}" class="form-control input-sm only_neonato_weight" required>
+			</fieldset>
+		</div>
+		<fieldset class="form-group">
+			<label>Fecha de Nacimiento:</label>
+			<label class="form-control input-sm" disabled>${to_ddmmyy(neo.f_nac)}</label>
+			<p class="help-block">Día/Mes/Año</p>
+		</fieldset>
+		<div class="clear-fix"></div>
+		<fieldset class="form-group">
+			<button type="button" class="back btn btn-sm btn-warning">Regresar</button>
+			<button type="submit" class="btn btn-sm btn-primary">Actualizar</button>
+		</fieldset>
+	</form>
+</%block>

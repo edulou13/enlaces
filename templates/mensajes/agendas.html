@@ -1,0 +1,62 @@
+<%inherit file="../base.html"/>
+<%block name="header_section">
+	<link href="${static_url('css/dataTables.bootstrap.min.css')}" rel="stylesheet" media="all">
+	<script type="text/javascript" charset="iso-8859-1" src="${static_url('js/jquery.dataTables.min.js')}"></script>
+	<script type="text/javascript" src="${static_url('js/dataTables.bootstrap.min.js')}"></script>
+	<script type="text/javascript" src="${static_url('js/customPaginator.min.js')}"></script>
+	<script type="text/javascript">
+		$(function(){
+			$('.message-menu, .sms-agenda').addClass('active');
+			var o_key = $('.fix-table').data('key'), c_filter = [
+				{val:o_key.yesterday, label:'Ayer'},
+				{val:o_key.today, label:'Hoy', def:true},
+				{val:o_key.tomorrow, label:'Mañana'},
+			];
+			$('.fix-table').removeAttr('data-key');
+			$('#custom').customPaginator({sort:false}).cfilter(c_filter);
+		});
+	</script>
+</%block>
+	<%block name="breadcrumbs">
+	<ul id="breadcrumbs" class="breadcrumb">
+		<li><a href="/">Inicio</a></li>
+		<li class="active">Agenda</li>
+	</ul>
+</%block>
+<%block name="left_content">
+	<div class="fix-table" data-key='{"today":"${today}","yesterday":"${yesterday}","tomorrow":"${tomorrow}"}'>
+		<%
+			labels = [u'Pre-Natal',u'Post-Natal',u'Promocional Pre-Natal',u'Promocional Post-Natal',u'Interrupción']
+			parse_msg = lambda msg: labels[msg.tipo - 1]
+		%>
+		<table id="custom" class="table table-hover table-bordered" width="99.8%" cellspacing="0">
+			<thead>
+				<tr>
+					<th colspan="7" class="text-center">Agendas</th>
+				</tr>
+				<tr>
+					<th>Comunidad</th>
+					<th>Mujer</th>
+					<th>Control</th>
+					<th>Tipo de Mensaje</th>
+					<th>Fecha Programada</th>
+					<th>Estado de Mensaje</th>
+					<th>Estado de Llamada</th>
+				</tr>
+			</thead>
+			<tbody>
+				% for ag in agendas:
+					<tr>
+						<td>${ag.persona.comunidad}</td>
+						<td>${ag.persona}</td>
+						<td>${ag.mensaje.nro_control}</td>
+						<td>${parse_msg(ag.mensaje)}</td>
+						<td>${to_ddmmyy(ag.fecha_con)}</td>
+						<td class="${'success' if ag.sms_estado else ''}">${'{}'.format('Pendiente' if not ag.sms_estado else 'Realizado')}</td>
+						<td class="${'success' if ag.lmd_estado else ''}">${'{}'.format('Pendiente' if not ag.lmd_estado else 'Realizado')}</td>
+					</tr>
+				% endfor
+			</tbody>
+		</table>
+	</div>
+</%block>

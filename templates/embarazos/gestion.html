@@ -1,0 +1,125 @@
+<%inherit file="../base.html"/>
+<%block name="header_section">
+	<link href="${static_url('css/dataTables.bootstrap.min.css')}" rel="stylesheet" media="all">
+	<link href="${static_url('css/sweet-alert.min.css')}" rel="stylesheet" media="all">
+	<script type="text/javascript" src="${static_url('js/jquery.base64.min.js')}"></script>
+	<script type="text/javascript" charset="iso-8859-1" src="${static_url('js/jquery.dataTables.min.js')}"></script>
+	<script type="text/javascript" src="${static_url('js/dataTables.bootstrap.min.js')}"></script>
+	<script type="text/javascript" src="${static_url('js/customPaginator.min.js')}"></script>
+	<script type="text/javascript" charset="iso-8859-1" src="${static_url('js/sweet-alert.min.js')}"></script>
+	<script type="text/javascript" src="${static_url('js/apps/pregnancies/pregnancies.min.js')}"></script>
+</%block>
+<%block name="breadcrumbs">
+	<ul id="breadcrumbs" class="breadcrumb" data-key='${pr.id_per}'>
+		<li><a href="/">Inicio</a></li>
+		<li><a href="#" class="back">Embarazadas</a></li>
+		<li class="active">${pr}</li>
+	</ul>
+</%block>
+<%block name="left_content">
+	<div class="detail-card">
+		<div class="row">
+			<div class="col-sm-6">
+				<dl class="dl-horizontal">
+					<dt>Embarazada:</dt>
+					<dd>${pr}</dd>
+					<dt>Edad:</dt>
+					<dd>${u'{} años'.format(pr.current_age())}</dd>
+					<dt>Celular:</dt>
+					<dd>${pr.telf if pr.telf else ''}</dd>
+					<dt>Municipio:</dt>
+					<dd>${pr.comunidad.municipio if pr.comunidad else ''}</dd>
+					<dt>Comunidad:</dt>
+					<dd>${pr.comunidad if pr.comunidad else ''}</dd>
+					<dt>Estado:</dt>
+					<dd class'pregStatus'>${pregnant_status(pr)[1]}</dd>
+					% if pregnant_status(pr)[0]==2:
+						<dt>Semana:</dt>
+						<dd>${pregnancyWeek(pr) if pregnant_status(pr)[0]==2 else ""}</dd>
+					% endif
+				</dl>
+			</div>
+			<div class="col-sm-6">
+				<dl class="dl-horizontal">
+					<dt>Contacto:</dt>
+					<dd>${pr.contacto if pr.contacto else ''}</dd>
+					<dt>Celular:</dt>
+					<dd>${'{}'.format(pr.contacto.telf or '' if pr.contacto else '')}</dd>
+					<dt>Sexo:</dt>
+					<dd>${'Femenino' if pr.contacto.sexo=='f' else 'Masculino'}</dd>
+					<dt>Parentesco:</dt>
+					<dd>${pr.relacion or ''}</dd>
+				</dl>
+			</div>
+		</div>
+	</div>
+	<div class="btn-actions">
+		<a class="back btn btn-sm btn-warning">Regresar</a>
+		% if 0 <= pregnant_status(pr)[0] <= 4:
+			<a href="#" class="edit btn btn-sm btn-info">Editar Datos</a>
+		% endif
+		% if pregnant_status(pr)[0]==1 or pregnant_status(pr)[0]==4:
+			<a href="#" class="pregnancy btn btn-sm btn-primary">Nuevo Embarazo</a>
+			<a href="#" class="pregDisable btn btn-sm btn-danger">Inhabilitar</a>
+		% elif 5 <= pregnant_status(pr)[0] <= 7:
+			<a href="#" class="confirm btn btn-sm btn-danger">Defunción</a>
+		% endif
+		% if not pr.defuncion and not (pregnant_status(pr)[0] in [0,3]):
+			<a href="#" class="death_reg btn btn-sm btn-danger">Defunción</a>
+		% endif
+		<button type="button" class="logs btn btn-sm btn-default">Ver Historial</button>
+	</div>
+	<div class="fix-table">
+		<table id="custom" class="table table-hover table-bordered" width="99.8%" cellspacing="0">
+			<thead>
+				<tr>
+					<th colspan="3" class="text-center">Embarazos</th>
+				</tr>
+				<tr>
+					<th>Parto Probable</th>
+					<th>Fecha de Parto</th>
+					<th>Estado</th>
+				</tr>
+			</thead>
+			<tbody>
+				% for em in embarazos:
+					<tr>
+						<td>
+							<a href="/controles/gestion?id_emb=${em.id_emb}">${to_ddmmyy(em.parto_prob)}</a>
+						</td>
+						<td>${'{}'.format(to_ddmmyy(em.parto_inst) if em.parto_inst else '')}</td>
+						<td>${pregnancy_status(em)[1]}</td>
+					</tr>
+				% endfor
+			</tbody>
+		</table>
+	</div>
+	% if neonatos:
+		<div class="fix-table">
+			<table id="neo-natos" class="table table-striped table-hover table-bordered" width="99.8%" cellspacing="0">
+				<thead>
+					<tr>
+						<th class="text-center" colspan="3">Recién Nacidos</th>
+					</tr>
+					<tr>
+						<th>Nombres y Apellidos</th>
+						<th>Fecha de Nacimiento</th>
+						<th>Estado</th>
+					</tr>
+				</thead>
+				<tbody>
+					% for neo in neonatos:
+						<tr>
+							<td><a href="/controles/gestion?id_rcn=${neo.id_rcn}">${neo}</a></td>
+							<td>${to_ddmmyy(neo.f_nac)}</td>
+							<td>
+							${"Advertencia" if(neo.defuncion and not neo.defuncion.f_conf) else "Fallecid{}".format("a" if neo.sexo=="f" else "o") if(neo.defuncion and neo.defuncion.f_conf) else "Habilitad{}".format("a" if neo.sexo=="f" else "o")}
+							</td>
+						</tr>
+					% endfor
+				</tbody>
+			</table>
+		</div>
+	% endif
+	<iframe class="pdf hidden"></iframe>
+</%block>

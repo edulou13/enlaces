@@ -1,0 +1,73 @@
+<%inherit file="../base.html"/>
+<%block name="header_section">
+	<link href="${static_url('css/dataTables.bootstrap.min.css')}" rel="stylesheet" media="all">
+	<script type="text/javascript" charset="iso-8859-1" src="${static_url('js/jquery.dataTables.min.js')}"></script>
+	<script type="text/javascript" src="${static_url('js/dataTables.bootstrap.min.js')}"></script>
+	<script type="text/javascript" src="${static_url('js/customPaginator.min.js')}"></script>
+	<script type="text/javascript">
+		$(function(){
+			$('.pregnant-menu').addClass('active');
+			$('#back').on({click:function(e){e.preventDefault();location.href='/embarazadas/gestion';}});
+			var c_filter = [
+				{val:'Gestando', label:'Embarazadas', def:true},
+				{val:'Embarazo de Riesgo', label:'Embarazos de Riesgo'},
+				{val:'Advertencia de interrupción', label:'Advertencias de interrupciones'},
+				{val:'Advertencia de defunción', label:'Advertencias de defunciones'},
+				{val:'Habilitada', label:'Habilitadas'},
+				{val:'Fallecida', label:'Defunciones'},
+				{val:'Defunción con interrupción de embarazo', label:'Defunciones con interrupciones'},
+				//{val:'Embarazo interrumpido', label:'Embarazos interrumpidos'},
+			];
+			$('#custom').customPaginator({sort:true}).cfilter(c_filter);
+		});
+	</script>
+</%block>
+<%block name="breadcrumbs">
+	<ul id="breadcrumbs" class="breadcrumb">
+		<li><a href="/">Inicio</a></li>
+		<li class="active">Mujeres</li>
+	</ul>
+</%block>
+<%block name="left_content">
+	<div class="btn-actions">
+		<a href="/embarazadas/nueva_embarazada" class="btn btn-sm btn-primary">Nueva Embarazada</a>
+	</div>
+	<div class="fix-table">
+		<%def name="checkWeek(pregnant)">
+			<%
+				if emb_status(pregnant)[0] in [2, 3, 5, 8]:
+					currweek = pregnancyWeek(pregnant)
+					return (currweek, '' if 1<=currweek<=29 else 'info' if 30<=currweek<=35 else 'warning' if 36<=currweek<=40 else 'danger')
+				else:
+					return ('','')
+			%>
+		</%def>
+		<table id="custom" class="table table-hover table-bordered" width="99.8%" cellspacing="0">
+			<thead>
+				<tr>
+					<th colspan="6" class="text-center">Mujeres</th>
+				</tr>
+				<tr>
+					<th>Mujer</th>
+					<th>Celular</th>
+					<th>Contacto</th>
+					<th>Comunidad</th>
+					<th>Estado</th>
+					<th>Semana</th>
+				</tr>
+			</thead>
+			<tbody>
+				% for em in embarazadas:
+					<tr>
+						<td><a href="/embarazos/gestion?id_per=${em.id_per}">${em}</a></td>
+						<td>${'{}'.format(em.telf or (em.contacto.telf if em.contacto else ''))}</td>
+						<td>${em.contacto if em.contacto else ""}</td>
+						<td>${em.comunidad}</td>
+						<td>${emb_status(em)[1]}</td>
+						<td class="${checkWeek(em)[1]}">${checkWeek(em)[0]}</td>
+					</tr>
+				% endfor
+			</tbody>
+		</table>
+	</div>
+</%block>

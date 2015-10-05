@@ -1,0 +1,65 @@
+<%inherit file="../base.html"/>
+<%block name="header_section">
+	<link href="${static_url('css/dataTables.bootstrap.min.css')}" rel="stylesheet" media="all">
+	<link href="${static_url('css/sweet-alert.min.css')}" rel="stylesheet" media="all">
+	<script type="text/javascript" charset="iso-8859-1" src="${static_url('js/jquery.dataTables.min.js')}"></script>
+	<script type="text/javascript" src="${static_url('js/dataTables.bootstrap.min.js')}"></script>
+	<script type="text/javascript" src="${static_url('js/customPaginator.min.js')}"></script>
+	<script type="text/javascript" charset="iso-8859-1" src="${static_url('js/sweet-alert.min.js')}"></script>
+	<script type="text/javascript" src="${static_url('js/apps/communities/communities.min.js')}"></script>
+</%block>
+<%block name="breadcrumbs">
+	<ul id="breadcrumbs" class="breadcrumb" data-key='{"red":${mup.red_salud.id_red}, "mup":${mup.id_mup}, "str":"${mup.__str__()}"}'>
+		<li><a href="/">Inicio</a></li>
+		<li><a href="#" class="networks">Redes de Salud</a></li>
+		<li><a href="#" class="back">Red: ${mup.red_salud}</a></li>
+		<li class="active">Municipio: ${mup}</li>
+	</ul>
+</%block>
+<%block name="left_content">
+	<div class="detail-card">
+		<div class="row">
+			<div class="col-sm-12">
+				<dl class="dl-horizontal">
+					<dt>Municipio:</dt>
+					<dd>${mup}</dd>
+					<dt>Estado:</dt>
+					<dd class="status">${"Habilitado" if mup.activo else "Inhabilitado"}</dd>
+				</dl>
+			</div>
+		</div>
+	</div>
+	<div class="btn-actions">
+		<a href="#" class="back btn btn-sm btn-warning">Regresar</a>
+		<a href="#" class="edit btn btn-sm btn-info">Editar Municipio</a>
+		% if mup.activo:
+			<a href="#" class="delete btn btn-sm btn-danger">Inhabilitar Municipio</a>
+			<a href="#" class="add btn btn-sm btn-primary">Nueva Comunidad</a>
+		% endif
+	</div>
+	<div class="fix-table">
+		<table id="custom" class="table table-hover table-bordered" width="99.8%" cellspacing="0">
+			<thead>
+				<tr>
+					<th colspan="4" class="text-center">Comunidades del Municipio ${mup}</th>
+					<tr>
+						<th>Comunidad</th>
+						<th>Celular</th>
+						<th>Establecimientos de Salud</th>
+						<th>Estado</th>
+					</tr>
+				</tr>
+				<tbody>
+					% for cm in mup.comunidades:
+						<tr>
+							<td><a href="/centros_salud/gestion?id_com=${cm.id_com}" title="Modificar">${cm}</a></td>
+							<td>${'{}'.format(cm.telf or '')}</td>
+							<td>${len(cm.centros_salud)}</td>
+							<td class="activo">${"Habilitado" if cm.activo else "Inhabilitado"}</td>
+						</tr>
+					% endfor
+				</tbody>
+			</thead>
+		</table>
+	</div>
+</%block>

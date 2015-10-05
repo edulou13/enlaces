@@ -1,0 +1,56 @@
+<%inherit file="../base.html"/>
+<%block name="header_section">
+	<link href="${static_url('css/jasny-bootstrap.min.css')}" rel="stylesheet" media="all">
+	<script type="text/javascript" charset="iso-8859-1" src="${static_url('js/jasny-bootstrap.min.js')}"></script>
+	<script type="text/javascript" src="${static_url('js/apps/messages/newMessage.min.js')}"></script>
+</%block>
+<%block name="breadcrumbs">
+	<ul id="breadcrumbs" class="breadcrumb" data-key='{"host":"${slave.host}","port":"${slave.port}"}'>
+		<li><a href="/">Inicio</a></li>
+		<li><a href="#" class="back">Catálogo</a></li>
+		<li class="active">Nuevo Mensaje</li>
+	</ul>
+</%block>
+<%block name="left_content">
+	<form class="SimpleForm">
+		${xsrf_form_html()}
+		<legend>Nuevo Mensaje</legend>
+		<div class="row">
+			<fieldset class="form-group col-sm-6">
+				<label>Tipo:</label>
+				<select name="tipo" id="tipo" class="form-control input-sm c_select" required>
+					<option value="-1" selected disabled>-- Elija Uno --</option>
+					<option value="1">Pre-Natal</option>
+					<option value="2">Post-Natal</option>
+					<option value="3">Promocional Pre-Natal</option>
+					<option value="4">Promocional Post-Natal</option>
+					<option value="5">Interrupción</option>
+				</select>
+			</fieldset>
+			<fieldset class="form-group has-feedback col-sm-6">
+				<label>Nro. de Control:</label>
+				<input type="text" name="nro_control" class="form-control input-sm only_msg_number" required>
+				<span class="form-control-feedback"></span>
+			</fieldset>
+		</div>
+		<fieldset class="form-group">
+			<label>Tenor:</label>
+			<textarea name="tenor" class="form-control input-sm only_msg_content" rows="3" required></textarea>
+		</fieldset>
+		<div class="fileinput fileinput-new input-group" data-provides="fileinput">
+			<div class="form-control" data-trigger="fileinput">
+				<span class="fileinput-filename"></span>
+			</div>
+			<span class="input-group-addon btn btn-default btn-file">
+				<span class="fileinput-new">Audio</span>
+				<span class="fileinput-exists"><i class="fa fa-refresh"></i></span>
+				<input type="file" name="audio" class="input-sm" accept=".mp3" required>
+			</span>
+			<a href="#" class="input-group-addon btn btn-default fileinput-exists" data-dismiss="fileinput"><i class="fa fa-times"></i></a>
+		</div>
+		<fieldset class="form-group">
+			<button type="button" id="back" class="btn btn-sm btn-warning">Regresar</button>
+			<button type="submit" class="btn btn-sm btn-primary">Guardar</button>
+		</fieldset>
+	</form>
+</%block>

@@ -1,0 +1,75 @@
+<%inherit file="../base.html"/>
+<%block name="header_section">
+	<link href="${static_url('css/sweet-alert.min.css')}" rel="stylesheet" media="all">
+	<script type="text/javascript" charset="iso-8859-1" src="${static_url('js/sweet-alert.min.js')}"></script>
+	<script type="text/javascript" src="${static_url('js/apps/users/updateUser.min.js')}"></script>
+</%block>
+<%block name="breadcrumbs">
+	<ul id="breadcrumbs" class="breadcrumb">
+		<li><a href="/">Inicio</a></li>
+		<li><a href="#" class="back">Usuarios</a></li>
+		<li class="active">Modificar Usuario</li>
+	</ul>
+</%block>
+<%block name="left_content">
+	<form class="SimpleForm key" data-key='{"rol":"${us.rol}","login":"${us.login}","alcance":"${us.alcance if us.alcance else -1}","red_salud":${us.red_salud.id_red if us.red_salud else -1},"municipio":${us.municipio.id_mup if us.municipio else -1},"centro_salud":${us.centro_salud.id_cen if us.centro_salud else -1},"red":${us.municipio.red_salud.id_red if us.municipio else us.centro_salud.ubicado.municipio.red_salud.id_red if us.centro_salud else -1}}'>
+		${xsrf_form_html()}
+		<input type="hidden" name="persona" value="${us.persona.id_per}" readonly>
+		<legend>Datos del Usuario</legend>
+		<div class="row">
+			<fieldset class="form-group col-sm-6 has-feedback">
+				<label for="inputLogin">Usuario:</label>
+				<input type="text" name="login" id="inputLogin" value="${us.login}" class="form-control input-sm only_login" required>
+				<span class="form-control-feedback"></span>
+			</fieldset>
+			<fieldset class="form-group col-sm-6 has-feedback">
+				<label for="inputPasswd">Contraseña:</label>
+				<input type="password" name="passwd" id="inputPasswd" class="form-control input-sm only_passwd">
+				<span class="form-control-feedback"></span>
+			</fieldset>
+		</div>
+		<fieldset class="form-group">
+			<label for="inputRol">Rol:</label>
+			<select name="rol" id="inputRol" class="form-control input-sm c_select" required>
+				<option value="-1">-- Elija Uno --</option>
+				<option value="Administrador" ${"selected" if us.rol==u"Administrador" else ""}>Administrador</option>
+				<option value="Operador de Registro" ${"selected" if us.rol==u"Operador de Registro" else ""}>Operador de Registro</option>
+				<option value="Operador de Radio" ${"selected" if us.rol==u"Operador de Radio" else ""}>Operador de Radio</option>
+			</select>
+		</fieldset>
+		<fieldset class="form-group">
+			<label for="inputAlcance">Alcance:</label>
+			<select name="alcance" id="inputAlcance" class="form-control input-sm c_select" required>
+				<option value="1">Global</option>
+				<option value="2">Red de Salud</option>
+				<option value="3">Municipio</option>
+				<option value="4">Establecimiento de Salud</option>
+			</select>
+		</fieldset>
+		<fieldset class="form-group redes_salud">
+			<label for="inputId_red">Red de Salud:</label>
+			<select name="id_red" id="inputId_red" class="form-control input-sm c_select" required></select>
+		</fieldset>
+		<fieldset class="form-group municipios">
+			<label for="inputId_mup">Municipios:</label>
+			<select name="id_mup" id="inputId_mup" class="form-control input-sm c_select" required>
+				<option value="-1">-- Elija Uno --</option>
+			</select>
+		</fieldset>
+		<fieldset class="form-group centros_salud">
+			<label for="inputId_cen">Establecimiento de Salud:</label>
+			<select name="id_cen" id="inputId_cen" class="form-control input-sm c_select" required>
+				<option value="-1">-- Elija Uno --</option>
+			</select>
+		</fieldset>
+		<div class="form-group">
+			<button type="button" class="btn btn-sm btn-warning" id="cancel">Regresar</button>
+			% if us.activo:
+				<button type="button" id="del" class="btn btn-sm btn-danger">Inhabilitar</button>
+				<button type="submit" class="btn btn-sm btn-primary">Actualizar</button>
+			% else:
+				<button type="submit" class="btn btn-sm btn-primary">Habilitar</button>
+			% endif
+		</div>
+	</form>
+</%block>

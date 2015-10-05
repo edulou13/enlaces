@@ -1,0 +1,29 @@
+<%inherit file="../base.html"/>
+<%block name="header_section">
+	<script type="text/javascript" src="${static_url('js/apps/networks/newNetwork.min.js')}"></script>
+</%block>
+<%block name="breadcrumbs">
+	<ul id="breadcrumbs" class="breadcrumb">
+		<li><a href="/">Inicio</a></li>
+		<li><a href="#" class="back">Redes de Salud</a></li>
+		<li class="active">Nueva Red de Salud</li>
+	</ul>
+</%block>
+<%block name="left_content">
+	<form class="SimpleForm">
+		${xsrf_form_html()}
+		<legend>Nueva Red de Salud</legend>
+		<div class="form-group has-feedback">
+			<label for="inputNombre">Nombre:</label>
+			<input type="text" name="nombre" id="inputNombre" class="form-control input-sm only_g_names" required>
+			<span class="form-control-feedback"></span>
+		</div>
+		<div class="municipio">
+			<legend>Municipios&nbsp;<a href="#" id="del" class="btn btn-xs btn-danger"><span title="Remover Último" class="fa fa-times"></span></a>&nbsp;<a href="#" id="add" class="btn btn-xs btn-info"><span class="fa fa-plus" title="Adicionar Municipio"></span></a></legend>
+		</div><br/>
+		<div class="form-group">
+			<button type="button" class="back btn btn-sm btn-warning">Regresar</button>
+			<button type="submit" class="btn btn-sm btn-primary">Guardar</button>
+		</div>
+	</form>
+</%block>

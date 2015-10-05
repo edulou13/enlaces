@@ -1,0 +1,94 @@
+<%inherit file="../base.html"/>
+<%block name="header_section">
+	<script type="text/javascript">
+		$(function(){
+			var ctelf = +$('input[name=telf]').val(), o_telf = $('input[name=telf]');
+			o_telf.on({
+				keyup:function(e){
+					var ttelf = $(this).val();
+					if(ctelf != +ttelf && ttelf.length==8 && ttelf.match(o_telf.data('pattern'))!=null){
+						$.post(
+							'/personas/v_telf',
+							data = {'_xsrf':$('input[name=_xsrf]').val(), 'telf':ttelf},
+							function(response){
+								if(response){
+									o_telf.val('');
+								}
+							}
+						);
+					}
+				}
+			});
+			$('.back').on({
+				click:function(e){
+					e.preventDefault();
+					location.href='/personas/gestion';
+				}
+			});
+			$('form').on({
+				submit:function(e){
+					e.preventDefault();
+					var oform = $(this), btn_submit = $('button[type=submit]');
+					btn_submit.disable().hide();
+					$.post(
+						'/personas/modificar',
+						data = oform.form2Dict(),
+						function(response){
+							if(response){
+								location.href='/personas/gestion';
+							} else{
+								btn_submit.enable().show();
+							}
+						}
+					);
+				}
+			});
+		});
+	</script>
+</%block>
+<%block name="breadcrumbs">
+	<ul id="breadcrumbs" class="breadcrumb">
+		<li><a href="/">Inicio</a></li>
+		<li><a href="/personas/gestion" class="back">Personas</a></li>
+		<li class="active">Modificar</li>
+	</ul>
+</%block>
+<%block name="left_content">
+	<form class="SimpleForm">
+		${xsrf_form_html()}
+		<input type="hidden" name="id_per" value="${pr.id_per}" readonly>
+		<legend class="text-center">Modificar Datos</legend>
+		<div class="row">
+			<fieldset class="form-group has-feedback col-sm-6">
+				<label>Nombre(s):</label>
+				<input type="text" name="nombres" value="${pr.nombres}" class="form-control input-sm only_p_names" required>
+				<span class="form-control-feedback"></span>
+			</fieldset>
+			<fieldset class="form-group has-feedback col-sm-6">
+				<label>Apellidos:</label>
+				<input type="text" name="apellidos" value="${pr.apellidos}" class="form-control input-sm only_p_lastnames" required>
+				<span class="form-control-feedback"></span>
+			</fieldset>
+		</div>
+		<div class="row">
+			<fieldset class="form-group col-sm-6">
+				<label>Sexo:</label>
+				<select name="sexo" class="form-control input-sm" required>
+					<option value="-1">-- Elija uno--</option>
+					<option value="f" ${"selected" if pr.sexo=="f" else ""}>Femenino</option>
+					<option value="m" ${"selected" if pr.sexo=="m" else ""}>Masculino</option>
+				</select>
+			</fieldset>
+			<fieldset class="form-group has-feedback col-sm-6">
+				<label>Celular:</label>
+				<input type="text" name="telf" value="${pr.telf or ''}" class="form-control input-sm only_cell_phone" ${"required" if pr.tipos.select().first().id_tip==2 else ""}>
+				<span class="form-control-feedback"></span>
+			</fieldset>
+		</div>
+		<div class="clear-fix"></div>
+		<fieldset class="form-group">
+			<button type="button" class="back btn btn-sm btn-warning">Regresar</button>
+			<button type="submit" class="btn btn-sm btn-primary">Actualizar</button>
+		</fieldset>
+	</form>
+</%block>

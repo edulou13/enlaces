@@ -1,0 +1,146 @@
+<%inherit file="../base.html"/>
+<%block name="header_section">
+	<link href="${static_url('css/datetimepicker.min.css')}" rel="stylesheet" media="all">
+	<link href="${static_url('css/sweet-alert.min.css')}" rel="stylesheet" media="all">
+	<script type="text/javascript" charset="iso-8859-1" src="${static_url('js/jasny-bootstrap.min.js')}"></script>
+	<script type="text/javascript" charset="iso-8859-1" src="${static_url('js/moment.min.js')}"></script>
+	<script type="text/javascript" src="${static_url('js/datetimepicker.min.js')}"></script>
+	<script type="text/javascript" charset="iso-8859-1" src="${static_url('js/sweet-alert.min.js')}"></script>
+	<script type="text/javascript" src="${static_url('js/apps/pregnants/updatePregnant.min.js')}"></script>
+</%block>
+<%block name="breadcrumbs">
+	<ul id="breadcrumbs" class="breadcrumb">
+		<li><a href="/">Inicio</a></li>
+		<li><a href="/embarazadas/gestion">Embarazadas</a></li>
+		<li><a href="#" class="back">${pr}</a></li>
+		<li class="active">Modificar Embarazada</li>
+	</ul>
+</%block>
+<%block name="left_content">
+	<form class="big-form" data-key='${checkfields}'>
+		${xsrf_form_html()}
+		<input type="hidden" name="id_per" value="${pr.id_per}" readonly>
+		<div class="inner-container">
+			<div class="left-side">
+				<legend>Datos de Embarazada</legend>
+				<div class="row">
+					<fieldset class="form-group has-feedback col-sm-5">
+						<label>Celular:</label>
+						<input type="text" name="telf" value="${pr.telf or ''}" class="form-control input-sm only_cell_phone">
+						<span class="form-control-feedback"></span>
+					</fieldset>
+					<fieldset class="form-group col-sm-7">
+						<label>Cobertura:</label>
+						<select name="cobertura" class="form-control input-sm c_select" required>
+							<option value="0" ${'selected' if pr.cobertura==0 else ''}>Sin Señal</option>
+							<option value="1" ${'selected' if pr.cobertura==1 else ''}>Con señal</option>
+							<option value="2" ${'selected' if pr.cobertura==2 else ''}>Radio</option>
+						</select>
+					</fieldset>
+				</div>
+				<div class="row">
+					<fieldset class="form-group has-feedback col-sm-6">
+						<label>Nombre(s):</label>
+						<input type="text" name="nombres" value="${pr.nombres}" class="form-control input-sm only_p_names" required>
+						<span class="form-control-feedback"></span>
+					</fieldset>
+					<fieldset class="form-group has-feedback col-sm-6">
+						<label>Apellido(s):</label>
+						<input type="text" name="apellidos" value="${pr.apellidos}" class="form-control input-sm only_p_lastnames" required>
+						<span class="form-control-feedback"></span>
+					</fieldset>
+				</div>
+				<div class="row">
+					<fieldset class="form-group has-feedback col-sm-6">
+						<label>Fecha de Nacimiento:</label>
+						<input type="text" name="f_nac" value="${'{}'.format(to_ddmmyy(pr.f_nac) if pr.f_nac else '')}" class="form-control input-sm only_date" required>
+						<span class="form-control-feedback"></span>
+					</fieldset>
+					<fieldset class="form-group has-feedback col-sm-6">
+						<label>CI:</label>
+						<input type="text" name="ci" value="${pr.ci or ''}" class="form-control input-sm only_ci">
+						<span class="form-control-feedback"></span>
+					</fieldset>
+				</div>
+				<div class="row">
+					<fieldset class="form-group col-sm-6">
+						<label>Pertenencia Étnica:</label>
+						<select name="id_etn" id="etnia" class="form-control input-sm c_select" required>
+							<option value="-1">-- Elija Una --</option>
+						</select>
+					</fieldset>
+					<fieldset class="form-group col-sm-6 locations">
+						<label>Red de Salud:</label>
+						<select id="red" class="form-control input-sm c_select" required>
+							<option value="-1">-- Elija Una --</option>
+						</select>
+					</fieldset>
+				</div>
+				<div  class='row'>
+					<fieldset class="form-group col-sm-6 locations">
+						<label>Municpio:</label>
+						<select id="municipio" class="form-control input-sm c_select" required>
+							<option value="-1">-- Elija Uno --</option>
+						</select>
+					</fieldset>
+					<fieldset class="form-group col-sm-6 locations">
+						<label>Comunidad:</label>
+						<select name="id_com" id="comunidad" class="form-control input-sm c_select" required>
+							<option value="-1">-- Elija Una --</option>
+						</select>
+					</fieldset>
+				</div>
+				<div class="row">
+					<fieldset class="form-group col-sm-6 locations">
+						<label>Establecimiento de Salud:</label>
+						<select name="centro_salud" id="centro" class="form-control input-sm c_select" required>
+							<option value="-1">-- Elija Uno --</option>
+						</select>
+					</fieldset>
+				</div>
+				<div class="clear-fix"></div>
+			</div>
+			<div class="right-side">
+				<legend class="contact-name">Contacto</legend>
+				<input type="hidden" name="c_id_per" value="${pr.contacto.id_per}" readonly>
+				<div class="row">
+					<fieldset class="form-group has-feedback col-sm-6">
+						<label>Celular:</label>
+						<input type="text" name="c_telf" value="${pr.contacto.telf if pr.contacto else ''}" class="form-control input-sm only_cell_phone" required>
+						<span class="form-control-feedback"></span>
+					</fieldset>
+					<fieldset class="form-group col-sm-6">
+						<label>Sexo:</label>
+						<select name="c_sexo" class="form-control input-sm c_select" required>
+							<option value="-1">-- Elija uno --</option>
+							<option value="f" ${"selected" if pr.contacto.sexo=="f" else ""}>Femenino</option>
+							<option value="m" ${"selected" if pr.contacto.sexo=="m" else ""}>Masculino</option>
+						</select>
+					</fieldset>
+				</div>
+				<div class="row">
+					<fieldset class="form-group col-sm-6 optional">
+						<label>Nombre(s):</label>
+						<input type="text" name="c_nombres" value="${pr.contacto.nombres}" class="form-control input-sm only_p_names" required>
+					</fieldset>
+					<fieldset class="form-group has-feedback col-sm-6 optional">
+						<label>Apellido(s):</label>
+						<input type="text" name="c_apellidos" value="${pr.contacto.apellidos}" class="form-control input-sm only_p_lastnames" required>
+					</fieldset>
+				</div>
+				<div class="row">
+					<fieldset class="form-group has-feedback col-sm-6">
+						<label>Parentesco:</label>
+						<input type="text" name="relacion" value="${pr.relacion or ''}" class="form-control input-sm only_comments" required>
+						<span class="form-control-feedback"></span>
+					</fieldset>
+				</div>
+				<div class="clear-fix"></div>
+			</div>
+		</div>
+		<fieldset class="form-group">
+			<button type="button" id="back" class="btn btn-sm btn-warning">Regresar</button>
+			<button type="submit" class="btn btn-sm btn-primary">${"Actualizar" if pr.activo else "Habilitar"}</button>
+		</fieldset>
+	</form>
+</%block>

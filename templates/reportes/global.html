@@ -1,0 +1,122 @@
+<%inherit file="../base.html"/>
+<%block name="header_section">
+	<style type="text/css" media="all">
+		body #container #left-content form:not(.big-form):not(.customform) {
+			width: auto!important;
+		}
+		.pdf, .pdf > iframe, .pdf > iframe embed {
+			border: 0!important;
+			margin: 0!important;
+			padding: 0!important;
+			width: 100%!important;
+			height: 4.5in!important;
+			border-radius: 5px!important;
+			background: transparent!important;
+		}
+		.pdf {
+			margin-top: 15px!important;
+		}
+	</style>
+	<link href="${static_url('css/datetimepicker.min.css')}" rel="stylesheet" media="all">
+	<script type="text/javascript" src="${static_url('js/jquery.base64.min.js')}"></script>
+	<script type="text/javascript" charset="iso-8859-1" src="${static_url('js/moment.min.js')}"></script>
+	<script type="text/javascript" src="${static_url('js/datetimepicker.min.js')}"></script>
+	<script type="text/javascript">
+		$(function(){
+			$('.report-menu, .report-global').addClass('active');
+			var btn_submit = $('button[type=submit]'), minDate = $('input[name=f_ini]').data('date'), maxDate = $('input[name=f_fin]').data('date');
+			btn_submit.disable();
+			$('input[name=f_ini], input[name=f_fin]').on({
+				'click focusin':function(e){
+					$(this).datetimepicker({
+						locale: 'es',
+						format: 'DD/MM/YYYY',
+						minDate: minDate,
+						maxDate: maxDate,
+					});
+				},
+				'focusout':function(e){
+					if($('select[name=tipo]').val()){
+						btn_submit.enable();
+					}
+				}
+			});
+			$('select[name=tipo]').on({
+				change:function(e){
+					btn_submit.enable();
+				}
+			});
+			var strWindowFeatures = "menubar=no,location=no,resizable=yes,scrollbars=yes,status=no,replace=true";
+			$('form').on({
+				submit:function(e){
+					e.preventDefault();
+					var data = $(this).form2Dict(), viewerurl;
+					btn_submit.disable();
+					$.ajaxSetup({async:false});
+					$.post(
+						'/reportes/global',
+						data = data,
+						function(response){
+							if(response){
+								if(oBrowser && ((oBrowser.app=='Chrome' && oBrowser.ver>=45) || (oBrowser.app=='Opera' && oBrowser.ver>=32))){
+									viewerurl = 'data:application/pdf;base64,{0}'.format(response);
+								} else {
+									var blob = new Blob([$.base64.decode(response)], {type:'application/pdf'}),
+										url = URL.createObjectURL(blob);
+									// viewerurl = 'http://{0}/viewerpdf?file={1}'.format(location.host,encodeURIComponent(url));
+									viewerurl = '/viewerpdf?file={0}'.format(encodeURIComponent(url));
+								}
+								if(oBrowser && oBrowser.app=='Trident'){
+									window.open(viewerurl, strWindowFeatures)
+								} else{
+									$('.pdf').removeClass('hidden').find('iframe').attr({src:viewerurl});
+								}
+							}
+						}
+					);
+					$.ajaxSetup({async:false});
+				}
+			});
+		});
+	</script>
+</%block>
+<%block name="breadcrumbs">
+	<ul id="breadcrumbs" class="breadcrumb">
+		<li><a href="/">Inicio</a></li>
+		<li class="active">Reporte Global</li>
+	</ul>
+</%block>
+<%block name="left_content">
+	<form class="SimpleForm">
+		${xsrf_form_html()}
+		<legend>Reporte Global</legend>
+		<div class="row">
+			<fieldset class="col-xs-12 col-sm-6 col-md-4 form-group" id="fixfield1">
+				<label>Tipo:</label>
+				<select name="tipo" class="form-control input-sm c_select" required>
+					<option value="-1" disabled selected>-- Elija Uno --</option>
+					<option value="1">Municipios</option>
+					<option value="2">Establecimientos</option>
+				</select>
+			</fieldset>
+			<fieldset class="col-xs-6 col-sm-3 col-md-4 form-group has-feedback">
+				<label>Fecha Inicial:</label>
+				<input type="text" name="f_ini" value="${to_ddmmyy(minDate)}" data-date="${minDate}" class="form-control input-sm only_date" required>
+				<span class="form-control-feedback"></span>
+				<p class="help-block">Día/Mes/Año</p>
+			</fieldset>
+			<fieldset class="col-xs-6 col-sm-3 col-md-4 form-group has-feedback">
+				<label>Fecha Final:</label>
+				<input type="text" name="f_fin" value="${to_ddmmyy(maxDate)}" data-date="${maxDate}" class="form-control input-sm only_date" required>
+				<span class="form-control-feedback"></span>
+				<p class="help-block">Día/Mes/Año</p>
+			</fieldset>
+		</div>
+		<fieldset class="form-group">
+			<button type="submit" class="btn btn-sm btn-primary">Generar</button>
+		</fieldset>
+	</form>
+	<div class="pdf hidden">
+		<iframe></iframe>
+	</div>
+</%block>

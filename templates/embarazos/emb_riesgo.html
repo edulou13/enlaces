@@ -1,0 +1,91 @@
+<%inherit file="../base.html"/>
+<%block name="header_section">
+	<script type='text/javascript'>
+		$(function(){
+			$('.pregnant-menu').addClass('active');
+			var o_key = $('#breadcrumbs').data('key'), btn_submit = $('button[type=submit]'), btn_del = $('#del');
+			$('#breadcrumbs').removeAttr('data-key');
+			$('.backPregnant').on({
+				click:function(e){
+					e.preventDefault();
+					location.href='/embarazos/gestion?id_per={0}'.format(o_key.id_per)
+				}
+			});
+			$('.back').on({
+				click:function(e){
+					e.preventDefault();
+					location.href='/controles/gestion?id_emb={0}'.format(o_key.id_emb);
+				}
+			});
+			$('form').on({
+				submit:function(e){
+					e.preventDefault();
+					var o_form = $(this);
+					btn_submit.disable();
+					btn_del.disable();
+					$.post(
+						'/embarazos/emb_riesgo',
+						data = o_form.form2Dict(),
+						function(response){
+							if(response){
+								location.href='/controles/gestion?id_emb={0}'.format(o_key.id_emb);
+							} else{
+								btn_submit.enable();
+								btn_del.enable();
+							}
+						}
+					);
+				}
+			});
+			$('#del').on({
+				click:function(e){
+					e.preventDefault();
+					btn_submit.disable();
+					btn_del.disable();
+					$.post(
+						'/embarazos/del_riesgo',
+						data = {'_xsrf':getCookie('_xsrf'),'id_emb':o_key.id_emb},
+						function(response){
+							if(response){
+								location.href='/controles/gestion?id_emb={0}'.format(o_key.id_emb);
+							} else{
+								btn_submit.enable();
+								btn_del.enable();
+							}
+						}
+					);
+				}
+			});
+		});
+	</script>
+</%block>
+<%block name="breadcrumbs">
+	<ul id="breadcrumbs" class="breadcrumb" data-key='{"id_per":${emb.embarazada.id_per},"id_emb":${emb.id_emb}}'>
+		<li><a href="/">Inicio</a></li>
+		<li><a href="/embarazadas/gestion">Embarazadas</a></li>
+		<li><a href="#" class="backPregnant">${emb.embarazada}</a></li>
+		<li><a href="#" class="back">Controles</a></li>
+		<li class="active">Embarazo de Riesgo</li>
+	</ul>
+</%block>
+<%block name="left_content">
+	<form class="SimpleForm">
+		${xsrf_form_html()}
+		<input type="hidden" name="id_emb" value="${emb.id_emb}" readonly>
+		<legend class="text-center">Embarazo de Riesgo</legend>
+		<fieldset class="form-group">
+			<label>Observaciones:</label>
+			<textarea name="riesgo" class="form-control input-sm only_comments" required>${emb.riesgo or ''}</textarea>
+		</fieldset>
+		<div class="clear-fix"></div>
+		<fieldset class="form-group">
+			<button type="button" class="btn btn-sm btn-warning back">Regresar</button>
+			% if emb.riesgo and len(emb.riesgo):
+			<button type="submit" class="btn btn-sm btn-primary">Actualizar</button>
+				<button type="button" id="del" class="btn btn-sm btn-danger">Eliminar</button>
+			% else:
+				<button type="submit" class="btn btn-sm btn-primary">Guardar</button>
+			% endif
+		</fieldset>
+	</form>
+</%block>

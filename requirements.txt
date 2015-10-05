@@ -1,0 +1,10 @@
+cython
+psycopg2
+pony
+pycurl
+futures
+tornado
+beaker
+mako
+pillow
+reportlab

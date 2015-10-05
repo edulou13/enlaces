@@ -1,0 +1,158 @@
+<%inherit file="../base.html"/>
+<%block name="header_section">
+	<link href="${static_url('css/datetimepicker.min.css')}" rel="stylesheet" media="all">
+	<link href="${static_url('css/sweet-alert.min.css')}" rel="stylesheet" media="all">
+	<script type="text/javascript" charset="iso-8859-1" src="${static_url('js/jasny-bootstrap.min.js')}"></script>
+	<script type="text/javascript" charset="iso-8859-1" src="${static_url('js/moment.min.js')}"></script>
+	<script type="text/javascript" src="${static_url('js/datetimepicker.min.js')}"></script>
+	<script type="text/javascript" charset="iso-8859-1" src="${static_url('js/sweet-alert.min.js')}"></script>
+	<script type="text/javascript" src="${static_url('js/apps/pregnants/newPregnant.min.js')}"></script>
+</%block>
+<%block name="breadcrumbs">
+	<ul id="breadcrumbs" class="breadcrumb">
+		<li><a href="/">Inicio</a></li>
+		<li><a href="#" class="back">Embarazadas</a></li>
+		<li class="active">Nueva Embarazada</li>
+	</ul>
+</%block>
+<%block name="left_content">
+	<form class="big-form">
+		${xsrf_form_html()}
+		<div class="inner-container">
+			<div class="left-side">
+				<legend><span class="prg-name">Nueva Embarazada</span></legend>
+				<div class="row">
+					<fieldset class="form-group has-feedback prg_cellphone col-sm-5">
+						<label for="">Celular:</label>
+						<input type="text" name="telf" id="inputTelf" class="form-control input-sm only_cell_phone">
+						<span class="form-control-feedback"></span>
+					</fieldset>
+					<fieldset class="form-group prg_signal prg_optional col-sm-7">
+						<label for="inputCobertura">Cobertura:</label>
+						<select name="cobertura" id="inputCobertura" class="form-control input-sm c_select">
+							<option value="0">Sin Señal</option>
+							<option value="1">Con Señal</option>
+							<option value="2">Radio</option>
+						</select>
+					</fieldset>
+				</div>
+				<div class="row">
+					<fieldset class="form-group has-feedback col-sm-6 prg_optional">
+						<label >Nombre(s):</label>
+						<input type="text" name="nombres" class="form-control input-sm only_p_names" required>
+						<span class="form-control-feedback"></span>
+					</fieldset>
+					<fieldset class="form-group has-feedback col-sm-6 prg_optional">
+						<label >Apellido(s):</label>
+						<input type="text" name="apellidos" class="form-control input-sm only_p_lastnames" required>
+						<span class="form-control-feedback"></span>
+					</fieldset>
+				</div>
+				<div class="row">
+					<fieldset class="form-group has-feedback col-sm-6">
+						<label>Fecha de Nacimiento:</label>
+						<input type="text" name="f_nac" value="${to_ddmmyy(min_age())}" class="form-control input-sm only_date" required>
+						<span class="form-control-feedback"></span>
+						<p class="help-block">Día/Mes/Año</p>
+					</fieldset>
+					<fieldset class="form-group has-feedback col-sm-6 prg_optional">
+						<label>CI:</label>
+						<input type="text" name="ci" class="form-control input-sm only_ci">
+						<span class="form-control-feedback"></span>
+					</fieldset>
+				</div>
+				<div class="row">
+					<fieldset class="form-group col-sm-6">
+						<label for="inputId_etn">Pertenencia Étnica:</label>
+						<select name="id_etn" id="inputId_etn" class="form-control input-sm c_select" required><option value="-1">-- Elija Una --</option></select>
+					</fieldset>
+					<fieldset class="form-group col-sm-6">
+						<label for="inputRedes">Red de Salud:</label>
+						<select id="inputRedes" class="form-control input-sm c_select" required><option value="-1">-- Elija Una --</option></select>
+					</fieldset>
+				</div>
+				<div class="row">
+					<fieldset class="form-group col-sm-6">
+						<label for="inputMunicipio">Municipio:</label>
+						<select id="inputMunicipio" class="form-control input-sm c_select" required><option value="-1">-- Elija Uno --</option></select>
+					</fieldset>
+					<fieldset class="form-group col-sm-6">
+						<label for="inputId_com">Comunidad:</label>
+						<select name="id_com" id="inputId_com" class="form-control input-sm c_select" required><option value="-1">-- Elija Una --</option></select>
+					</fieldset>
+				</div>
+				<div class="row">
+					<fieldset class="form-group col-sm-6">
+						<label>Establecimiento de Salud:</label>
+						<select id="inputCentros" name="centro_salud" class="form-control input-sm c_select" required>
+							<option value="-1" disabled selected>-- Elija Uno --</option>
+						</select>
+					</fieldset>
+					<fieldset class="form-group has-feedback col-sm-6">
+						<label for="inputParto_prob">Fecha de Parto Probable:</label>
+						<input type="text" name="parto_prob" value="${to_ddmmyy(utc.now().date())}" id="inputParto_prob" class="form-control input-sm only_date" required>
+						<span class="form-control-feedback"></span>
+						<p class="help-block">Día/Mes/Año</p>
+					</fieldset>
+				</div>
+				<div class="clear-fix"></div>
+			</div>
+			<div class="right-side">
+				<legend><span class="contact-name">Contacto</span>&nbsp;<span id="delContact" class="hidden btn btn-xs btn-danger fa"></span></legend>
+				<div class="contact-form">
+					<div class="row">
+						<fieldset class="form-group has-feedback col-sm-5">
+							<label for="inputTelfc">Celular:</label>
+							<input type="text" name="c_telf" id="inputTelfc" class="form-control input-sm only_cell_phone" required>
+							<span class="form-control-feedback"></span>
+						</fieldset>
+						<fieldset class="form-group optional col-sm-7">
+							<label for="inputCoberturac">Cobertura:</label>
+							<select name="c_cobertura" id="inputCoberturac" class="form-control input-sm c_select">
+								<option value="0">Sin Señal</option>
+								<option value="1">Con Señal</option>
+								<option value="2">Radio</option>
+							</select>
+						</fieldset>
+					</div>
+					<div class="row">
+						<fieldset class="form-group has-feedback col-sm-6 optional">
+							<label>Nombre(s):</label>
+							<input type="text" name="c_nombres" class="form-control input-sm only_p_names" required>
+							<span class="form-control-feedback"></span>
+						</fieldset>
+						<fieldset class="form-group has-feedback col-sm-6 optional">
+							<label>Apellido(s):</label>
+							<input type="text" name="c_apellidos" class="form-control input-sm only_p_lastnames" required>
+							<span class="form-control-feedback"></span>
+						</fieldset>
+					</div>
+					<div class="row">
+						<fieldset class="form-group col-sm-6 optional">
+							<label>Sexo:</label>
+							<select name="c_sexo" class="form-control input-sm c_select" required>
+								<option value="-1" disabled selected>-- Elija Uno --</option>
+								<option value="f">Femenino</option>
+								<option value="m">Masculino</option>
+							</select>
+						</fieldset>
+						<fieldset class="form-group has-feedback col-sm-6">
+							<label>Relación con la Embarazada:</label>
+							<input type="text" name="relacion" class="form-control input-sm only_comments" required>
+							<span class="form-control-feedback"></span>
+						</fieldset>
+						## <fieldset class="form-group col-sm-6 optional">
+						## 	<label for="inputId_etnc">Pertenencia Étnica:</label>
+						## 	<select name="c_id_etn" id="inputId_etnc" class="form-control input-sm c_select" required><option value="-1">-- Elija Una --</option></select>
+						## </fieldset>
+					</div>
+					<div class="clear-fix"></div>
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<button type="button" id="cancel" class="btn btn-sm btn-warning">Regresar</button>
+			<button type="submit" class="btn btn-sm btn-primary">Guardar</button>
+		</div>
+	</form>
+</%block>

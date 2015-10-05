@@ -1,0 +1,132 @@
+<%inherit file="../base.html"/>
+<%block name="header_section">
+	<link href="${static_url('css/dataTables.bootstrap.min.css')}" rel="stylesheet" media="all">
+	<script type="text/javascript" charset="iso-8859-1" src="${static_url('js/jquery.dataTables.min.js')}"></script>
+	<script type="text/javascript" src="${static_url('js/dataTables.bootstrap.min.js')}"></script>
+	<script type="text/javascript" src="${static_url('js/customPaginator.min.js')}"></script>
+	<script type="text/javascript">
+		$(function(){
+			$('.message-menu, .sms-flash').addClass('active');
+			$('.back, .cancel').on({
+				click:function(e){
+					e.preventDefault();
+					location.href='/mensajes/agendas';
+				}
+			});
+			// $('.cancel').on({
+			// 	click:function(e){
+			// 		e.preventDefault();
+			// 		location.href='/mensajes/sendsms';
+			// 	}
+			// });
+			$('textarea[name=tenor]').on({
+				keyup:function(e){
+					var strs = $(this).val().length, help = $(this).next('p');
+					help.text(strs+'/140');
+				}
+			});
+			$('form').on({
+				submit:function(e){
+					e.preventDefault();
+					e.stopPropagation();
+					var oform = $(this).form2Dict(true), ocheckbox = $('.ocheckbox:checked');
+					if(ocheckbox.length){
+						$.each(ocheckbox, function(i, chk){
+							var $chk = $(chk);
+							if($chk.prop('checked')){
+								var pr = $($chk.closest('td')).data('person');
+								if($.type(pr.id_per)==='undefined'){
+									$chk.closest('tr').css('background','red');
+								}
+								oform.push({name:'id_per',value:pr.id_per});
+							}
+						});
+						$.post(
+							'/mensajes/sendsms',
+							data = oform,
+							function(response){
+								if(response){
+									location.href='/mensajes/agendas';
+								}
+							}
+						);
+					} else{
+						$('button[type=submit]').enable();
+					}
+				}
+			});
+			$('#all').on({
+				click:function(e){
+					var choice_all = $(this), persons = $('#custom').find('input:checkbox');
+					if(choice_all.prop('checked')){
+						persons.prop('checked',true);
+					} else{
+						persons.prop('checked',false);
+					}
+				}
+			});
+			$('#custom').customPaginator({sort:false});
+		});
+	</script>
+</%block>
+<%block name="breadcrumbs">
+	<ul id="breadcrumbs" class="breadcrumb">
+		<li><a href="/">Inicio</a></li>
+		<li><a href="#" class="back">Agenda</a></li>
+		<li class="active">Enviar SMS</li>
+	</ul>
+</%block>
+<%block name="left_content">
+	<div class="SPbig-form">
+		<div class="inner-container">
+			<div class="left-side">
+				<form class="customform">
+					${xsrf_form_html()}
+					<legend>Enviar SMS</legend>
+					<fieldset class="form-group has-feedback">
+						<label>Título:</label>
+						<input type="text" name="titulo" class="form-control input-sm only_g_names" required>
+					</fieldset>
+					<fieldset class="form-group has-feedback">
+						<label>Texto:</label>
+						<textarea name="tenor" class="form-control input-sm only_msg_content" required></textarea>
+						<p class="help-block">0/140</p>
+					</fieldset>
+					<fieldset class="form-group">
+						<button type="button" class="cancel btn btn-sm btn-danger">Cancelar</button>
+						<button type="submit" class="btn btn-sm btn-primary">Enviar</button>
+					</fieldset>
+				</form>
+			</div>
+			<div class="right-side">
+				<div class="fix-table">
+					<table id="custom" class="table table-hover table-bordered" width="99.8%" cellspacing="0">
+						<thead>
+							<tr>
+								<th colspan="5" class="text-center">Personas</th>
+							</tr>
+							<tr>
+								<th><span>Marcar todos&nbsp;<input type="checkbox" id="all"></span></th>
+								<th>Nombres y Apellidos</th>
+								<th>Celular</th>
+								<th>Sexo</th>
+								<th>Tipo</th>
+							</tr>
+						</thead>
+						<tbody>
+							% for pr in personas:
+								<tr>
+									<td data-person='{"id_per":${pr.id_per}}'>&nbsp;&nbsp;&nbsp;<input type="checkbox" class="ocheckbox"></td>
+									<td>${pr}</td>
+									<td>${pr.telf or ''}</td>
+									<td>${"Femenino" if pr.sexo=="f" else "Masculino"}</td>
+									<td>${pr.tipos.select().first() if pr.tipos.count()>0 else ''}</td>
+								</tr>
+							% endfor
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</%block>

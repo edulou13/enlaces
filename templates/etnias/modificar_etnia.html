@@ -1,0 +1,34 @@
+<%inherit file="../base.html"/>
+<%block name="header_section">
+	<link href="${static_url('css/sweet-alert.min.css')}" rel="stylesheet" media="all">
+	<script type="text/javascript" charset="iso-8859-1" src="${static_url('js/sweet-alert.min.js')}"></script>
+	<script type="text/javascript" src="${static_url('js/apps/ethnics/updateEthnic.js')}"></script>
+</%block>
+<%block name="breadcrumbs">
+	<ul id="breadcrumbs" class="breadcrumb">
+		<li><a href="/">Inicio</a></li>
+		<li><a href="#" class="back">Pertenencia Étnica</a></li>
+		<li class="active">${et.nombre}</li>
+	</ul>
+</%block>
+<%block name="left_content">
+	<form class="SimpleForm">
+		${xsrf_form_html()}
+		<input type="hidden" name="id_etn" value="${et.id_etn}" readonly>
+		<legend>Modificar Pertenencia Étnica</legend>
+		<div class="form-group has-feedback">
+			<label for="inputNombre">Nombre:</label>
+			<input type="text" name="nombre" value="${et.nombre}" id="inputNombre" class="form-control input-sm only_g_names" required>
+			<span class="form-control-feedback"></span>
+		</div>
+		<div class="form-group">
+			<button type="button" class="back btn btn-sm btn-warning">Regresar</button>
+			% if et.activo:
+				<button type="button" id="del" class="btn btn-sm btn-danger">Inhabilitar</button>
+				<button type="submit" class="btn btn-sm btn-primary">Actualizar</button>
+			% else:
+				<button type="submit" class="btn btn-sm btn-primary">Habilitar</button>
+			% endif
+		</div>
+	</form>
+</%block>

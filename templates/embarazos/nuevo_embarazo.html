@@ -1,0 +1,35 @@
+<%inherit file="../base.html"/>
+<%block name="header_section">
+	<link href="${static_url('css/datetimepicker.min.css')}" rel="stylesheet" media="all">
+	<script type="text/javascript" charset="iso-8859-1" src="${static_url('js/jasny-bootstrap.min.js')}"></script>
+	<script type="text/javascript" charset="iso-8859-1" src="${static_url('js/moment.min.js')}"></script>
+	<script type="text/javascript" src="${static_url('js/datetimepicker.min.js')}"></script>
+	<script type="text/javascript" src="${static_url('js/apps/pregnancies/newPregnancy.min.js')}"></script>
+</%block>
+<%block name="breadcrumbs">
+	<ul id="breadcrumbs" class="breadcrumb">
+		<li><a href="/">Inicio</a></li>
+		<li><a href="/embarazadas/gestion" class="back">Embarazadas</a></li>
+		<li><a href="#" class="back">${pr}</a></li>
+		<li class="active">Nuevo Embarazo</li>
+	</ul>
+</%block>
+<%block name="left_content">
+	<form class="SimpleForm">
+		${xsrf_form_html()}
+		<input type="hidden" name="id_per" value="${pr.id_per}" readonly>
+		<fieldset>
+			<legend>Nuevo Embarazo</legend>
+		</fieldset>
+		<fieldset class="form-group has-feedback">
+			<label for="inputParto_prob">Parto Probable:</label>
+			<input type="text" name="parto_prob" id="inputParto_prob" value="${to_ddmmyy(utc.now().date())}" class="form-control input-sm only_date" required>
+			<span class="form-control-feedback"></span>
+			<p class="help-block">Día/Mes/Año</p>
+		</fieldset>
+		<fieldset>
+			<button type="button" id="back" class="btn btn-sm btn-warning">Regresar</button>
+			<button type="submit" class="btn btn-sm btn-primary">Guardar</button>
+		</fieldset>
+	</form>
+</%block>

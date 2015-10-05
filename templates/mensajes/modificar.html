@@ -1,0 +1,46 @@
+<%inherit file="../base.html"/>
+<%block name="header_section">
+	<link href="${static_url('css/sweet-alert.min.css')}" rel="stylesheet" media="all">
+	<script type="text/javascript" charset="iso-8859-1" src="${static_url('js/sweet-alert.min.js')}"></script>
+	<script type="text/javascript" src="${static_url('js/apps/messages/updateMessage.min.js')}"></script>
+</%block>
+<%block name="breadcrumbs">
+	<ul id="breadcrumbs" class="breadcrumb">
+		<li><a href="/">Inicio</a></li>
+		<li><a href="#" class="back">Catálogo</a></li>
+		<li class="active">Modificar Mensaje</li>
+	</ul>
+</%block>
+<%block name="left_content">
+	<form class="SimpleForm">
+		${xsrf_form_html()}
+		<input type="hidden" name="id_msj" value="${msg.id_msj}" readonly>
+		<legend class="text-center">Modificar Mensaje</legend>
+		<div class="row">
+			<fieldset class="form-group col-sm-6">
+				<label>Tipo:</label>
+				<select id="tipo" class="form-control input-sm c_select">
+					<option value="-1">-- Elija Uno --</option>
+					<option value="1" ${"selected" if msg.tipo==1 else ""}>Pre-Natal</option>
+					<option value="2" ${"selected" if msg.tipo==2 else ""}>Post-Natal</option>
+					<option value="3" ${"selected" if msg.tipo==3 else ""}>Promocional Pre-Natal</option>
+					<option value="4" ${"selected" if msg.tipo==4 else ""}>Promocional Post-Natal</option>
+					<option value="5" ${"selected" if msg.tipo==5 else ""}>Interrupción</option>
+				</select>
+			</fieldset>
+			<fieldset class="form-group has-feedback col-sm-6 check">
+				<label>${'Nro. de Control:' if msg.nro_control else 'Título:'}</label>
+				<input type="text" name="${'nro_control' if msg.nro_control else 'titulo'}" value="${msg.nro_control if msg.nro_control else msg.titulo}" class="form-control input-sm" required>
+				<span class="form-control-feedback"></span>
+			</fieldset>
+		</div>
+		<fieldset class="form-group">
+			<label>Tenor:</label>
+			<textarea name="tenor" class="form-control input-sm only_msg_content" rows="3" required>${msg.tenor}</textarea>
+		</fieldset>
+		<fieldset class="form-group">
+			<button type="button" id="back" class="btn btn-sm btn-warning">Regresar</button>
+			<button type="submit" class="btn btn-sm btn-primary">Actualizar</button>
+		</fieldset>
+	</form>
+</%block>

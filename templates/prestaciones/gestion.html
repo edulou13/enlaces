@@ -1,0 +1,48 @@
+<%inherit file="../base.html"/>
+<%block name="header_section">
+	<link href="${static_url('css/dataTables.bootstrap.min.css')}" rel="stylesheet" media="all">
+	<script type="text/javascript" charset="iso-8859-1" src="${static_url('js/jquery.dataTables.min.js')}"></script>
+	<script type="text/javascript" src="${static_url('js/dataTables.bootstrap.min.js')}"></script>
+	<script type="text/javascript" src="${static_url('js/customPaginator.min.js')}"></script>
+	<script type="text/javascript">
+		$(function(){
+			$('.manager-menu, .capability-sub').addClass('active');
+			$('#add').on({click:function(e){e.preventDefault();location.href='/prestaciones/nueva_prestacion';}});
+			$('#custom').customPaginator();
+		});
+	</script>
+</%block>
+<%block name="breadcrumbs">
+	<ul id="breadcrumbs" class="breadcrumb">
+		<li><a href="/">Inicio</a></li>
+		<li class="active">Prestaciones</li>
+	</ul>
+</%block>
+<%block name="left_content">
+<div class="btn-actions">
+	<a href="#" id="add" class="btn btn-sm btn-primary">Nueva Prestación</a>
+</div>
+<div class="fix-table">
+	<table id="custom" class="table table-hover table-bordered" width="99.8%" cellspacing="0">
+		<thead>
+			<tr>
+				<th colspan="3" class="text-center">Prestaciones</th>
+			</tr>
+			<tr>
+				<th>Prestación</th>
+				<th>Establecimientos de Salud</th>
+				<th>Estado</th>
+			</tr>
+		</thead>
+		<tbody>
+			% for pr in prestaciones:
+			<tr>
+				<td><a href="/prestaciones/modificar_prestacion?id_pst=${pr.id_pst}" title="Modificar">${pr}</a></td>
+				<td class="centros">${len(pr.centros_salud)}</td>
+				<td class="activo">${'Habilitado' if pr.activo else 'Inhabilitado'}</td>
+			</tr>
+			% endfor
+		</tbody>
+	</table>
+</div>
+</%block>

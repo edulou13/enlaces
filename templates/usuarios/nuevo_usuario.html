@@ -1,0 +1,110 @@
+<%inherit file="../base.html"/>
+<%block name="header_section">
+	<link href="${static_url('css/sweet-alert.min.css')}" rel="stylesheet" media="all">
+	<script type="text/javascript" charset="iso-8859-1" src="${static_url('js/sweet-alert.min.js')}"></script>
+	<script type="text/javascript" src="${static_url('js/apps/users/newUser.min.js')}"></script>
+</%block>
+<%block name="breadcrumbs">
+	<ul id="breadcrumbs" class="breadcrumb">
+		<li><a href="/">Inicio</a></li>
+		<li><a href="#" class="back">Usuarios</a></li>
+		<li class="active">Nuevo Usuario</li>
+	</ul>
+</%block>
+<%block name="left_content">
+	<form class="big-form">
+		${xsrf_form_html()}
+		<div class="inner-container">
+			<div class="left-side">
+				<legend>Datos de <span class="person">la Persona</span></legend>
+				<div class="row">
+					<fieldset class="form-group has-feedback col-sm-6">
+						<label for="inputTelf">Celular:</label>
+						<input type="text" name="telf" id="inputTelf" class="form-control input-sm only_cell_phone" required>
+						<span class="form-control-feedback"></span>
+					</fieldset>
+					<fieldset class="form-group has-feedback col-sm-6">
+						<label>CI:</label>
+						<input type="text" name="ci" class="form-control input-sm only_ci" required>
+						<span class="form-control-feedback"></span>
+					</fieldset>
+				</div>
+				<div class="row">
+					<fieldset class="form-group has-feedback optional col-sm-6">
+						<label for="inputNombre">Nombre(s):</label>
+						<input type="text" name="nombres" id="inputNombre" class="form-control input-sm only_p_names" required>
+						<span class="form-control-feedback"></span>
+					</fieldset>
+					<fieldset class="form-group has-feedback optional col-sm-6">
+						<label for="inputAp_pat">Apellido(s):</label>
+						<input type="text" name="apellidos" id="inputAp_pat" class="form-control input-sm only_p_lastnames" required>
+						<span class="form-control-feedback"></span>
+					</fieldset>
+				</div>
+				<fieldset class="form-group optional col-sm-6">
+					<label>Sexo:</label>
+					<select name="sexo" class="form-control input-sm c_select" required>
+						<option value="-1" selected disabled>-- Elija Uno --</option>
+						<option value="f">Femenino</option>
+						<option value="m">Masculino</option>
+					</select>
+				</fieldset>
+				<div class="clear-fix hidden-xs"></div>
+			</div>
+			<div class="right-side">
+				<legend>Datos del Usuario</legend>
+				<div class="row">
+					<fieldset class="form-group has-feedback col-sm-6">
+						<label for="inputLogin">Usuario:</label>
+						<input type="text" name="login" id="inputLogin" class="form-control input-sm only_login" required>
+						<span class="form-control-feedback"></span>
+					</fieldset>
+					<fieldset class="form-group has-feedback col-sm-6">
+						<label for="inputPasswd">Contraseña:</label>
+						<input type="password" name="passwd" id="inputPasswd" class="form-control input-sm only_passwd" required>
+						<span class="form-control-feedback"></span>
+					</fieldset>
+				</div>
+				<div class="row">
+					<fieldset class="form-group col-sm-6">
+						<label for="inputRol">Rol:</label>
+						<select name="rol" id="inputRol" class="form-control input-sm c_select" required>
+							<option value="-1" selected disabled>-- Elija Uno --</option>
+							<option value="Administrador">Administrador</option>
+							<option value="Operador de Registro">Operador de Registro</option>
+							<option value="Operador de Radio">Operador de Radio</option>
+						</select>
+					</fieldset>
+					<fieldset class="form-group col-sm-6">
+						<label for="inputAlcance">Alcance:</label>
+						<select name="alcance" id="inputAlcance" class="form-control input-sm c_select" required>
+							<option value="1">Global</option>
+							<option value="2">Red de Salud</option>
+							<option value="3">Municipio</option>
+							<option value="4">Establecimiento de Salud</option>
+						</select>
+					</fieldset>
+				</div>
+				<div class="row">
+					<fieldset class="form-group redes_salud col-sm-6">
+						<label for="inputId_red">Red de Salud:</label>
+						<select name="id_red" id="inputId_red" class="form-control input-sm c_select" required></select>
+					</fieldset>
+					<fieldset class="form-group municipios col-sm-6">
+						<label for="inputId_mup">Municipio:</label>
+						<select name="id_mup" id="inputId_mup" class="form-control input-sm c_select" required></select>
+					</fieldset>
+					<fieldset class="form-group centros_salud col-sm-6">
+						<label for="inputId_cen">Establecimiento de Salud:</label>
+						<select name="id_cen" id="inputId_cen" class="form-control input-sm c_select" required></select>
+					</fieldset>
+				</div>
+				<div class="clear-fix"></div>
+			</div>
+		</div>
+		<div class="form-group">
+			<button type="button" class="btn btn-sm btn-warning" id="cancel">Regresar</button>
+			<button type="submit" class="btn btn-sm btn-primary">Guardar</button>
+		</div>
+	</form>
+</%block>

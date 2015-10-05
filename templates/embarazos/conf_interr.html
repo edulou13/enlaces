@@ -1,0 +1,71 @@
+<%inherit file="../base.html"/>
+<%block name="header_section">
+	<style type="text/css" media="all">
+		#fix{
+			margin-top: -5px !important;
+		}
+	</style>
+	<link href="${static_url('css/datetimepicker.min.css')}" rel="stylesheet" media="all">
+	<script type="text/javascript" charset="iso-8859-1" src="${static_url('js/jasny-bootstrap.min.js')}"></script>
+	<script type="text/javascript" charset="iso-8859-1" src="${static_url('js/moment.min.js')}"></script>
+	<script type="text/javascript" src="${static_url('js/datetimepicker.min.js')}"></script>
+	<script type="text/javascript" src="${static_url('js/apps/pregnancies/interruptConfirm.min.js')}"></script>
+</%block>
+<%block name="breadcrumbs">
+	<ul id="breadcrumbs" class="breadcrumb" data-key='{"id_per":${death.embarazo.embarazada.id_per},"id_emb":${death.embarazo.id_emb},"done":${1 if death.f_conf else 0}}'>
+		<li><a href="/">Inicio</a></li>
+		<li><a href="/embarazadas/gestion">Embarazadas</a></li>
+		<li><a href="#" class="pregnant">${death.embarazo.embarazada}</a></li>
+		<li><a href="#" class="back">Controles</a></li>
+		<li class="active">Interrupción del Embarazo</li>
+	</ul>
+</%block>
+<%block name="left_content">
+	<form class="big-form">
+		${xsrf_form_html()}
+		<input type="hidden" name="id_def" value="${death.id_def}" readonly>
+		<div class="inner-container">
+			<div class="left-side">
+				<legend>Notificación</legend>
+				<div class="row optional">
+					<fieldset class="form-group has-feedback col-sm-6">
+						<label>Fecha de Interrupción:</label>
+						<label class="form-control input-sm" disabled>${to_ddmmyy(death.fecha)}</label>
+						<p class="help-block">Día/Mes/Año</p>
+					</fieldset>
+					<fieldset class="form-group has-feedback col-sm-6">
+						<label>Fecha de Notificación:</label>
+						<label class="form-control input-sm" disabled>${to_ddmmyy(death.f_notf)}</label>
+						<p class="help-block">Día/Mes/Año</p>
+					</fieldset>
+				</div>
+				<fieldset id="fix" class="form-group optional">
+					<label>Observación de Notificación:</label>
+					<textarea class="form-control input-sm" row="4" disabled>${death.obs_notf}</textarea>
+				</fieldset>
+				<div class="clear-fix"></div>
+			</div>
+			<div class="right-side">
+				<legend>Confirmación</legend>
+				<fieldset class="form-group has-feedback">
+					<label>Fecha de Confirmación:</label>
+					<input type="text" name="f_conf" value="${to_ddmmyy(death.f_conf) if death.f_conf else to_ddmmyy(utc.now().date())}" class="form-control input-sm only_date" required>
+					<span class="form-control-feedback"></span>
+					<p class="help-block">Día/Mes/Año</p>
+				</fieldset>
+				<fieldset class="form-group">
+					<label>Observación de Notificación:</label>
+					<textarea name="obs_conf" class="form-control input-sm only_comments" row="4" required>${'{}'.format(death.obs_conf or '')}</textarea>
+				</fieldset>
+				<div class="clear-fix"></div>
+			</div>
+		</div>
+		<fieldset class="form-group">
+			<button type="button" id="back" class="btn btn-sm btn-warning">Regresar</button>
+			% if not death.f_conf:
+				<button type="button" id="interr" class="btn btn-sm btn-danger">Eliminar</button>
+				<button type="submit" class="btn btn-sm btn-primary">Confirmar</button>
+			% endif
+		</fieldset>
+	</form>
+</%block>

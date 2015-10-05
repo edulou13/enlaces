@@ -1,0 +1,74 @@
+<%inherit file="../base.html"/>
+<%block name="header_section">
+	<link href="${static_url('css/dataTables.bootstrap.min.css')}" rel="stylesheet" media="all">
+	<link href="${static_url('css/sweet-alert.min.css')}" rel="stylesheet" media="all">
+	<script type="text/javascript" charset="iso-8859-1" src="${static_url('js/jquery.dataTables.min.js')}"></script>
+	<script type="text/javascript" src="${static_url('js/dataTables.bootstrap.min.js')}"></script>
+	<script type="text/javascript" src="${static_url('js/customPaginator.min.js')}"></script>
+	<script type="text/javascript" charset="iso-8859-1" src="${static_url('js/sweet-alert.min.js')}"></script>
+	<script type="text/javascript" src="${static_url('js/apps/hospitals/hospitals.min.js')}"></script>
+</%block>
+<%block name="breadcrumbs">
+	<ul id="breadcrumbs" class="breadcrumb" data-key='{"red":${com.municipio.red_salud.id_red},"mup":${com.municipio.id_mup},"com":${com.id_com},"str":"${com.__str__()}"}'>
+		<li><a href="/">Inicio</a></li>
+		<li><a href="#" class="networks">Redes de Salud</a></li>
+		<li><a href="#" class="net">Red: ${com.municipio.red_salud}</a></li>
+		<li><a href="#" class="back">Municipio: ${com.municipio}</a></li>
+		<li class="active">Comunidad: ${com}</li>
+	</ul>
+</%block>
+<%block name="left_content">
+	<div class="detail-card">
+		<div class="row">
+			<div class="col-sm-12">
+				<dl class="dl-horizontal">
+					<dt>Comunidad:</dt>
+					<dd>${com}</dd>
+					<dt>Estado:</dt>
+					<dd class="status">${"Habilitado" if com.activo else "Inhabilitado"}</dd>
+				</dl>
+			</div>
+		</div>
+	</div>
+	<div class="btn-actions">
+		<a href="#" class="back btn btn-sm btn-warning">Regresar</a>
+		<a href="#" class="edit btn btn-sm btn-info">Editar Comunidad</a>
+		% if com.activo:
+			<a href="#" class="delete btn btn-sm btn-danger">Inhabilitar Comunidad</a>
+			<a href="#" id="add" class="btn btn-sm btn-primary">Nuevo Establecimiento</a>
+		% endif
+	</div>
+	<div class="fix-table">
+		<table id="custom" class="table table-hover table-bordered" width="99.8%" cellspacing="0">
+			<thead>
+				<tr>
+					<th colspan="6" class="text-center">Establecimientos de Salud de la Comunidad ${com}</th>
+				</tr>
+				<tr>
+					<th>Establecimiento</th>
+					<th>Tipo</th>
+					<th>Comunidades</th>
+					<th>Prestaciones</th>
+					<th>Estado</th>
+					<th>Acciones</th>
+				</tr>
+			</thead>
+			<tbody>
+				% for cs in com.centros_salud:
+					<tr>
+						<td><a href="/centros_salud/modificar_establecimiento?id_cen=${cs.id_cen}" title="Modificar">${cs}</a></td>
+						<td>${cs.tipo}</td>
+						<td class="comunidades">${len(cs.comunidades)}</td>
+						<td class="prestaciones">${len(cs.prestaciones)}</td>
+						<td class="activo">${"Habilitado" if cs.activo else "Inhabilitado"}</td>
+						<td>
+							% if cs.activo:
+								<a href="#" class="del link" data-key="${dumps(dict(nombre=cs.nombre,id=cs.id_cen))}">Inhabilitar</a>
+							% endif
+						</td>
+					</tr>
+				% endfor
+			</tbody>
+		</table>
+	</div>
+</%block>

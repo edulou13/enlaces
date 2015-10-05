@@ -1,0 +1,67 @@
+<%inherit file="../base.html"/>
+<%block name="header_section">
+	<link href="${static_url('css/dataTables.bootstrap.min.css')}" rel="stylesheet" media="all">
+	<script type="text/javascript" charset="iso-8859-1" src="${static_url('js/jquery.dataTables.min.js')}"></script>
+	<script type="text/javascript" src="${static_url('js/dataTables.bootstrap.min.js')}"></script>
+	<script type="text/javascript" src="${static_url('js/customPaginator.min.js')}"></script>
+	<script type="text/javascript">
+		$(function(){
+			var strWindowFeatures = "menubar=no,location=no,resizable=yes,scrollbars=yes,status=no,replace=true";
+			$('.message-menu, .sms-catalog').addClass('active');
+			$('.bpdf').on({
+				click:function(e){
+					e.preventDefault();
+					if(oBrowser && ((oBrowser.app=='Chrome' && oBrowser.ver>=45) || (oBrowser.app=='Opera' && oBrowser.ver>=32))){
+						window.open('/reportes/catalogo', strWindowFeatures);
+					} else {
+						window.open('/viewerpdf?file=reportes/catalogo', strWindowFeatures);
+					}
+				}
+			});
+			$('#custom').customPaginator({sort:false});
+		});
+	</script>
+</%block>
+<%block name="breadcrumbs">
+	<ul id="breadcrumbs" class="breadcrumb">
+		<li><a href="/">Inicio</a></li>
+		<li class="active">Catálogo</li>
+	</ul>
+</%block>
+<%block name="left_content">
+	<div class="btn-actions">
+		<a href="/mensajes/adicionar_msj" class="btn btn-sm btn-primary">Nuevo Mensaje</a>
+		<button type="button" class="btn btn-sm btn-default bpdf">Ver Catálogo</button>
+	</div>
+	<div class="fix-table">
+		<%
+			labels = [u'Pre-Natal',u'Post-Natal',u'Promocional Pre-Natal',u'Promocional Post-Natal',u'Interrupción']
+			parse_msg = lambda msg: labels[msg.tipo - 1]
+		%>
+		<table id="custom" class="table table-hover table-bordered" width="99.8%" cellspacing="0">
+			<thead>
+				<tr>
+					<th colspan="5" class="text-center">Catálogo de Mensajes</th>
+				</tr>
+				<tr>
+					<th>Tipo</th>
+					<th>Control</th>
+					<th>Agendas</th>
+					<th>Estado</th>
+					<th>Usuario</th>
+				</tr>
+			</thead>
+			<tbody>
+				% for msg in mensajes:
+					<tr>
+						<td><a href="/mensajes/modificar_msj?id_msj=${msg.id_msj}">${parse_msg(msg)}</a></td>
+						<td>${msg.nro_control or ''}</td>
+						<td>${len(msg.agendas)}</td>
+						<td class="status">${"Habilitado" if msg.activo else "Inhabilitado"}</td>
+						<td>${msg.usuario}</td>
+					</tr>
+				% endfor
+			</tbody>
+		</table>
+	</div>
+</%block>

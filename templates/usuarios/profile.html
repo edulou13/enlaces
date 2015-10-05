@@ -1,0 +1,68 @@
+<%inherit file="../base.html"/>
+<%block name="header_section">
+	<link href="${static_url('css/sweet-alert.min.css')}" rel="stylesheet" media="all">
+	<script type="text/javascript" charset="iso-8859-1" src="${static_url('js/sweet-alert.min.js')}"></script>
+	<script type="text/javascript" src="${static_url('js/apps/users/updateprofile.min.js')}"></script>
+</%block>
+<%block name="breadcrumbs">
+	<ul id="breadcrumbs" class="breadcrumb">
+		<li><a href="/">Inicio</a></li>
+		<li class="active">Perfíl</li>
+	</ul>
+</%block>
+<%block name="left_content">
+	<form class="big-form">
+		${xsrf_form_html()}
+		<input type="hidden" name="persona" value="${userprofl.persona.id_per}" readonly>
+		<div class="inner-container">
+			<div class="left-side">
+				<legend>Perfíl de Usuario</legend>
+				<div class="row">
+					<fieldset class="form-group has-feedback col-sm-6">
+						<label>Nombre(s):</label>
+						<input type="text" name="nombres" value="${userprofl.persona.nombres}" class="form-control input-sm only_p_names" required>
+						<span class="form-control-feedback"></span>
+					</fieldset>
+					<fieldset class="form-group has-feedback col-sm-6">
+						<label>Apellido(s):</label>
+						<input type="text" name="apellidos" value="${userprofl.persona.apellidos}" class="form-control input-sm only_p_lastnames" required>
+						<span class="form-control-feedback"></span>
+					</fieldset>
+				</div>
+				<div class="row">
+					<fieldset class="form-group has-feedback col-sm-6">
+						<label>CI:</label>
+						<input type="text" name="ci" value="${userprofl.persona.ci or ''}" class="form-control input-sm only_ci" required>
+						<span class="form-control-feedback"></span>
+					</fieldset>
+					<fieldset class="form-group has-feedback col-md-6">
+						<label>Celular:</label>
+						<input type="text" name="telf" value="${userprofl.persona.telf}" id="cellphone" class="form-control input-sm only_cell_phone" required>
+						<span class="form-control-feedback"></span>
+					</fieldset>
+				</div>
+				<div class="clear-fix"></div>
+			</div>
+			<div class="right-side">
+				<legend>Datos del Usuario</legend>
+				<div class="row">
+					<fieldset class="form-group has-feedback col-sm-6">
+						<label>Usuario:</label>
+						<input type="text" name="login" value="${userprofl.login}" class="form-control input-sm only_login" required>
+						<span class="form-control-feedback"></span>
+					</fieldset>
+					<fieldset class="form-group has-feedback col-sm-6">
+						<label>Contraseña:</label>
+						<input type="password" name="passwd" class="form-control input-sm only_passwd">
+						<span class="form-control-feedback"></span>
+					</fieldset>
+				</div>
+				<div class="clear-fix"></div>
+			</div>
+		</div>
+		<fieldset class="form-group">
+			<button type="button" class="back btn btn-sm btn-warning">Cancelar</button>
+			<button type="submit" class="btn btn-sm btn-primary">Actualizar</button>
+		</fieldset>
+	</form>
+</%block>

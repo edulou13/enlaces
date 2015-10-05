@@ -1,0 +1,93 @@
+<%inherit file="../base.html"/>
+<%block name="header_section">
+	<link href="${static_url('css/dataTables.bootstrap.min.css')}" rel="stylesheet" media="all">
+	<script type="text/javascript" charset="iso-8859-1" src="${static_url('js/jquery.dataTables.min.js')}"></script>
+	<script type="text/javascript" src="${static_url('js/dataTables.bootstrap.min.js')}"></script>
+	<script type="text/javascript" src="${static_url('js/customPaginator.min.js')}"></script>
+	<script type="text/javascript" src="${static_url('js/apps/controls/controls.min.js')}"></script>
+</%block>
+<%block name="breadcrumbs">
+	<ul id="breadcrumbs" class="breadcrumb" data-key='{"id_per":${pr.id_per},"id_emb":${em.id_emb}}'>
+		<li><a href="/">Inicio</a></li>
+		<li><a href="/embarazadas/gestion">Embarazadas</a></li>
+		<li><a href="#" class="back">${pr}</a></li>
+		<li class="active">Controles</li>
+	</ul>
+</%block>
+<%block name="left_content">
+	<div class="detail-card">
+		<div class="row">
+			<% status = pregnancy_status(em) %>
+			<div class="col-sm-12">
+				<dl class="dl-horizontal">
+					<dt>Embarazada:</dt>
+					<dd>${pr}</dd>
+					<dt>Estado:</dt>
+					<dd>${status[1]}</dd>
+					% if not em.parto_inst:
+						<dt>Parto Probable:</dt>
+						<dd>${to_ddmmyy(em.parto_prob)}</dd>
+					% else:
+						<dt>Fecha de Parto:</dt>
+						<dd>${'{}'.format(to_ddmmyy(em.parto_inst) if em.parto_inst else '')}</dd>
+						<dt>Tipo de Parto:</dt>
+						<dd>${"Institucional" if em.tipo==1 else "Domiciliario"}</dd>
+						<dt>Lugar:</dt>
+						<dd>${em.embarazada.comunidad}</dd>
+					% endif
+				</dl>
+			</div>
+		</div>
+	</div>
+	<div class="btn-actions">
+		<a href="#" class="back btn btn-sm btn-warning">Regresar</a>
+		% if 1<=status[0]<=4:
+			<a href="#" class="born btn btn-sm btn-primary">Registrar Parto</a>
+			% if current_user.rol==u'Administrador':
+				<a href="#" class="remake_agenda btn btn-sm btn-info">Reprogramar Embarazo</a>
+			% endif
+			% if em.riesgo:
+				<a href="#" class="risk btn btn-sm btn-default">Riesgo</a>
+			% endif
+			% if status[0]==1:
+				<a href="#" class="risk btn btn-sm btn-default">Registrar Riesgo</a>
+			% endif
+			% if 1<=status[0]<=2:
+				<a href="#" class="interrupt btn btn-sm btn-danger">Interrupción</a>
+			% elif status[0]==3:
+				<a href="#" class="confirm btn btn-sm btn-danger">Interrupción</a>
+			% endif
+		% elif status[0]==5:
+			<a href="#" class="confirm btn btn-sm btn-danger">Interrupción</a>
+		% endif
+	</div>
+	<div class="fix-table">
+		<table id="custom" class="table table-hover table-bordered" width="99.8%" cellspacing="0">
+			<thead>
+				<tr>
+					<th colspan="4" class="text-center">Controles</th>
+				</tr>
+				<tr>
+					<th>Tipo</th>
+					<th>Control</th>
+					<th>Fecha</th>
+					<th>Asistido</th>
+				</tr>
+			</thead>
+			<tbody>
+				% for ct in controles:
+					<tr>
+						<td>${ct.tipo}</td>
+						<td>${ct.nro_con}</td>
+						<td>${'{}'.format(to_ddmmyy(ct.fecha_con))}</td>
+						% if ct.asistido:
+							<td>Asistido</td>
+						% else:
+							<td><a href="/controles/control_asistencia?id_cnt=${ct.id_cnt}">Pendiente</a></td>
+						% endif
+					</tr>
+				% endfor
+			</tbody>
+		</table>
+	</div>
+</%block>

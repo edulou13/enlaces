@@ -1,0 +1,54 @@
+<%inherit file="../base.html"/>
+<%block name="header_section">
+	<link href="${static_url('css/dataTables.bootstrap.min.css')}" rel="stylesheet" media="all">
+	<script type="text/javascript" charset="iso-8859-1" src="${static_url('js/jquery.dataTables.min.js')}"></script>
+	<script type="text/javascript" src="${static_url('js/dataTables.bootstrap.min.js')}"></script>
+	<script type="text/javascript" src="${static_url('js/customPaginator.min.js')}"></script>
+	<script type="text/javascript">
+		$(function(){
+			$('.hospitals-menu').addClass('active');
+			$('#datatable').customPaginator();
+		});
+	</script>
+</%block>
+<%block name="breadcrumbs">
+	<ul id="breadcrumbs" class="breadcrumb">
+		<li><a href="/">Inicio</a></li>
+		<li class="active">Establecimientos</li>
+	</ul>
+</%block>
+<%block name="left_content">
+	<div class="fix-table">
+		<table id="datatable" class="table table-hover table-bordered" width="99.8%" cellspacing="0">
+			<thead>
+				<tr>
+					<th colspan="8" class="text-center">Establecimientos de Salud</th>
+				</tr>
+				<tr>
+					<th>Establecimiento</th>
+					<th>Ubicación</th>
+					<th>Categoría</th>
+					<th>Encargado</th>
+					<th>Empleados</th>
+					<th>Comunidades</th>
+					<th>Prestaciones</th>
+					<th>Estado</th>
+				</tr>
+			</thead>
+			<tbody>
+				% for cs in centros:
+					<tr>
+						<td><a href="/centros_salud/modificar_establecimiento?id_cen=${cs.id_cen}" title="Modificar">${cs}</a></td>
+						<td>${cs.ubicado}</td>
+						<td>${cs.tipo}</td>
+						<td>${'{}'.format(cs.encargado or '')}</td>
+						<td>${len(cs.empleados)}</td>
+						<td class="comunidades">${len(cs.comunidades)}</td>
+						<td class="prestaciones">${len(cs.prestaciones)}</td>
+						<td class="activo">${"Activo" if cs.activo else "Eliminado"}</td>
+					</tr>
+				% endfor
+			</tbody>
+		</table>
+	</div>
+</%block>
