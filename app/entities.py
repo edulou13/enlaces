@@ -193,7 +193,7 @@ class Usuario(db.Entity):
 	persona = _PrimaryKey(Persona, reverse='usuario')
 	rol = _Required(unicode)
 	alcance = _Optional(unicode, 1, nullable=True)
-	login = _Required(unicode, 12, unique=True)
+	login = _Required(unicode, 24, unique=True)
 	passwd = _Required(str)
 	red_salud = _Optional(Red_Salud, reverse='operadores', nullable=True)
 	municipio = _Optional(Municipio, reverse='operadores', nullable=True)
