@@ -130,6 +130,38 @@ class DatasReport:
 			repr_maker.del_lastItem
 			repr_maker.del_lastItem
 	@classmethod
+	def get_Agenda(cls, repr_maker, start_date, end_date):
+		start_date, end_date = _to_date(start_date), _to_date(end_date)
+		type_str = lambda tp: 'Pre-Natal' if tp==1 else 'Post-Natal' if tp==2 else 'Pre-Promocional' if tp==3 else 'Post-Promocional' if tp==4 else u'Interrupción' if tp==5 else 'Extraordinario'
+		titles = [u'Mujer',u'Tipo de Mensaje',u'Control',u'Fecha de Control',u'Fecha de Notificación', u'SMS', u'Llamada']
+		section, subsection, sub_subsection = _Index(), _Index(), _Index()
+		for red in _Red.select(lambda red: red.activo).order_by(lambda red: (red.nombre,)):
+			red_status = False
+			repr_maker.heading_content(u'{}.- Red de Salud: {}'.format(section.increment, red.__str__()), align='justify', sep=.3)
+			for mup in red.municipios.select(lambda mup: mup.activo).order_by(lambda mup: (mup.nombre,)):
+				mup_status = False
+				repr_maker.heading_content(u'{}.{}.- Municipio: {}, {}'.format(section.idx, subsection.increment, mup.__str__(), mup.dpto), align='justify', sep=.3)
+				for com in mup.comunidades.select(lambda com: com.activo).order_by(lambda com: (com.nombre,)):
+					repr_maker.heading_content(u'{}.{}.{}.- Comunidad: {}'.format(section.idx, subsection.idx, sub_subsection.increment, com.__str__()), align='justify', sep=.3)
+					table = [titles]
+					for ag in _agendasCrt.AgendasReport(id_com=com.id_com, start_date=start_date, end_date=end_date):
+						table.extend([[ag.persona.__str__(), type_str(ag.mensaje.tipo), ag.mensaje.nro_control, _to_ddmmyy(ag.fecha_con), _to_ddmmyy(ag.modificado.date()), ('Pendiente' if not ag.sms_estado else 'Enviado'), ('Pendiente' if not ag.lmd_estado else 'Realizada')]])
+					if len(table) > 1:
+						repr_maker.parse_datatable(table, cellsW={0:6,1:4,2:1.7,3:2.5,4:2.5,5:3,6:3})
+						mup_status = True if not mup_status else mup_status
+						red_status = True if not red_status else red_status
+					else:
+						cls().__delete(repr_maker)
+						sub_subsection.decrement
+				if not mup_status:
+					subsection.decrement
+					cls().__delete(repr_maker)
+				sub_subsection.reset
+			if not red_status:
+				section.decrement
+				cls().__delete(repr_maker)
+			subsection.reset
+	@classmethod
 	def get_RadioOperador(cls, repr_maker, start_date, end_date):
 		start_date, end_date = _to_date(start_date), _to_date(end_date)
 		type_str = lambda tp: 'Pre-Natal' if tp==1 else 'Post-Natal' if tp==2 else 'Pre-Promocional' if tp==3 else 'Post-Promocional' if tp==4 else u'Interrupción' if tp==5 else 'Extraordinario'

@@ -97,7 +97,7 @@ class Agendas(BaseHandler):
 		today = self.utc.now().date()
 		params = dict(
 			today = to_ddmmyy(today), yesterday = to_ddmmyy((today - timedelta(days=1))), tomorrow = to_ddmmyy((today + timedelta(days=1))),
-			agendas = agendasCrt.get_all().filter(lambda ag: ag.mensaje.tipo>=1 and ag.mensaje.tipo<=5),
+			agendas = agendasCrt.get_all().filter(lambda ag: ag.mensaje.tipo>=1 and ag.mensaje.tipo<=5 and not(ag.sms_estado or ag.lmd_estado)),
 			to_ddmmyy = to_ddmmyy
 		)
 		#print params

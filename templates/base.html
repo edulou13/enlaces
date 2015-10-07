@@ -26,23 +26,23 @@
 				$(function(){
 					window.history.pushState("string", "Title", "/");
 					var strWindowFeatures = "menubar=no,location=no,resizable=yes,scrollbars=yes,status=no,replace=true";
-					$('.navbar, #breadcrumbs, .btn-actions, #right-content, .help-menu').find('a').each(function(){
+					$('.navbar, #breadcrumbs, .btn-actions, #right-content').find('a').each(function(){
 						var olink = $(this);
 						olink.data('link', olink.attr('href')).removeAttr('href').on({
 							click:function(e){
 								e.preventDefault();
 								var cur_link = $(this);
-								if(cur_link.hasClass('popup')){
-									window.open(cur_link.data('link'), strWindowFeatures);
-								}
-								else if(!cur_link.hasClass('pdfpopup')){
-									location.href = cur_link.data('link');
-								} else {
+								if(cur_link.hasClass('pdfpopup')){
 									if(oBrowser && ((oBrowser.app=='Chrome' && oBrowser.ver>=45) || (oBrowser.app=='Opera' && oBrowser.ver>=32))){
 										window.open(cur_link.data('link'), strWindowFeatures);
 									} else {
 										window.open('/viewerpdf?file={0}'.format(cur_link.data('link')), strWindowFeatures);
 									}
+								}
+								else if(cur_link.hasClass('newWin')){
+									window.open(cur_link.data('link'), strWindowFeatures);
+								} else {
+									location.href = cur_link.data('link');
 								}
 							}
 						});
@@ -115,79 +115,79 @@
 										<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-child"></i>&nbsp;Tipos de Persona
 										</a>
 										<ul class="dropdown-menu">
-											<li><a class="popup" href="http://enlaces.org.bo/ayuda/Administracion/#11-nuevos-tipos-de-personas">Crear Nuevo Tipo de Persona</a></li>
+											<li><a class="newWin" href="http://enlaces.org.bo/ayuda/Administracion/#11-nuevos-tipos-de-personas">Crear Nuevo Tipo de Persona</a></li>
 										</ul>
 									</li>
 									<li class="dropdown-submenu">
 										<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-ambulance"></i>&nbsp;Tipos de prestaciones
 										</a>
 										<ul class="dropdown-menu">
-											<li><a class="popup" href="http://enlaces.org.bo/ayuda/Administracion/#21-crear-nuevos-tipos-de-prestaciones" target="blank">Crear Nuevo Tipo de Prestaciones</a></li>
+											<li><a class="newWin" href="http://enlaces.org.bo/ayuda/Administracion/#21-crear-nuevos-tipos-de-prestaciones" target="blank">Crear Nuevo Tipo de Prestaciones</a></li>
 										</ul>
 									</li>
 									<li class="dropdown-submenu">
 										<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-flag"></i>&nbsp;Pertencia Étnica
 										</a>
 										<ul class="dropdown-menu">
-											<li><a class="popup" href="http://enlaces.org.bo/ayuda/Administracion/#3-pertenencia-etnica">Crear Nueva Pertencia Étnica</a></li>
-											<li><a class="popup" href="http://enlaces.org.bo/ayuda/Administracion/#32-modificar-pertenencia-etnica">Modificar Pertencia Étnica</a></li>
+											<li><a class="newWin" href="http://enlaces.org.bo/ayuda/Administracion/#3-pertenencia-etnica">Crear Nueva Pertencia Étnica</a></li>
+											<li><a class="newWin" href="http://enlaces.org.bo/ayuda/Administracion/#32-modificar-pertenencia-etnica">Modificar Pertencia Étnica</a></li>
 										</ul>
 									</li>
 									<li class="dropdown-submenu">
 										<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-sitemap"></i>&nbsp;Redes de Salud
 										</a>
 										<ul class="dropdown-menu">
-											<li><a class="popup" href="http://enlaces.org.bo/ayuda/Administracion/#41-crearmodificar-nueva-red-de-salud">Crear y Modificar Nueva Red de Salud</a></li>
-											<li><a class="popup" href="http://enlaces.org.bo/ayuda/Administracion/#43-crearmodificar-nuevo-establecimiento-de-salud">Crear y Modificar Establecimientos de Salud</a></li>
-											<li><a class="popup" href="http://enlaces.org.bo/ayuda/Administracion/#42-crearmodificar-nuevo-municipio">Crear y Modificar Municipio</a></li>
-											<li><a class="popup" href="http://enlaces.org.bo/ayuda/Administracion/#43-crearmodificar-comunidad">Crear y Modificar Comunidades</a></li>
+											<li><a class="newWin" href="http://enlaces.org.bo/ayuda/Administracion/#41-crearmodificar-nueva-red-de-salud">Crear y Modificar Nueva Red de Salud</a></li>
+											<li><a class="newWin" href="http://enlaces.org.bo/ayuda/Administracion/#43-crearmodificar-nuevo-establecimiento-de-salud">Crear y Modificar Establecimientos de Salud</a></li>
+											<li><a class="newWin" href="http://enlaces.org.bo/ayuda/Administracion/#42-crearmodificar-nuevo-municipio">Crear y Modificar Municipio</a></li>
+											<li><a class="newWin" href="http://enlaces.org.bo/ayuda/Administracion/#43-crearmodificar-comunidad">Crear y Modificar Comunidades</a></li>
 										</ul>
 									</li>
 									<li class="dropdown-submenu">
 										<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user"></i>&nbsp;Usuarios
 										</a>
 										<ul class="dropdown-menu">
-											<li><a class="popup" href="http://enlaces.org.bo/ayuda/Administracion/#51-adicionar-usuario">Adicionar Usuario</a></li>
-											<li><a class="popup" href="http://enlaces.org.bo/ayuda/Administracion/#52-modificar-usuario">Modificar Usuario</a></li>
-											<li><a class="popup" href="http://enlaces.org.bo/ayuda/Administracion/#53-inhabilitar-usuario">Inhabilitar Usuario</a></li>
+											<li><a class="newWin" href="http://enlaces.org.bo/ayuda/Administracion/#51-adicionar-usuario">Adicionar Usuario</a></li>
+											<li><a class="newWin" href="http://enlaces.org.bo/ayuda/Administracion/#52-modificar-usuario">Modificar Usuario</a></li>
+											<li><a class="newWin" href="http://enlaces.org.bo/ayuda/Administracion/#53-inhabilitar-usuario">Inhabilitar Usuario</a></li>
 										</ul>
 									</li>
 									<li class="dropdown-submenu">
 										<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-female"></i>&nbsp;Mujeres
 										</a>
 										<ul class="dropdown-menu">
-											<li><a class="popup" href="http://enlaces.org.bo/ayuda/Mujeres/#11-nueva-embarazada">Nueva Embarazada</a></li>
-											<li><a class="popup" href="http://enlaces.org.bo/ayuda/Mujeres/#12-modificar-embarazada">Modificar Embarazada</a></li>
-											<li><a class="popup" href="http://enlaces.org.bo/ayuda/Mujeres/#16-defuncion-de-la-embarazada">Defuncion de Embarazada</a></li>
-											<li><a class="popup" href="http://enlaces.org.bo/ayuda/Mujeres/#13-nuevo-embarazo">Nuevo Embarazo</a></li>
-											<li><a class="popup" href="http://enlaces.org.bo/ayuda/Mujeres/#17-interrupcion-de-embarazo">Interrupcion del Embarazo</a></li>
-											<li><a class="popup" href="http://enlaces.org.bo/ayuda/Mujeres/#18-embarazos-de-riesgo">Embarazo de Riesgo</a></li>
-											<li><a class="popup" href="http://enlaces.org.bo/ayuda/Mujeres/#15-registrar-parto">Registrar Parto</a></li>
-											<li><a class="popup" href="http://enlaces.org.bo/ayuda/Administracion/#6-reprogramar-la-fecha-de-parto">Reprogramar Parto</a></li>
-											<li><a class="popup" href="http://enlaces.org.bo/ayuda/Mujeres/#14-registrar-asistencia-a-controles-embarazadasrecien-nacidos">Registrar Asistencia a Controles</a></li>
+											<li><a class="newWin" href="http://enlaces.org.bo/ayuda/Mujeres/#11-nueva-embarazada">Nueva Embarazada</a></li>
+											<li><a class="newWin" href="http://enlaces.org.bo/ayuda/Mujeres/#12-modificar-embarazada">Modificar Embarazada</a></li>
+											<li><a class="newWin" href="http://enlaces.org.bo/ayuda/Mujeres/#16-defuncion-de-la-embarazada">Defuncion de Embarazada</a></li>
+											<li><a class="newWin" href="http://enlaces.org.bo/ayuda/Mujeres/#13-nuevo-embarazo">Nuevo Embarazo</a></li>
+											<li><a class="newWin" href="http://enlaces.org.bo/ayuda/Mujeres/#17-interrupcion-de-embarazo">Interrupcion del Embarazo</a></li>
+											<li><a class="newWin" href="http://enlaces.org.bo/ayuda/Mujeres/#18-embarazos-de-riesgo">Embarazo de Riesgo</a></li>
+											<li><a class="newWin" href="http://enlaces.org.bo/ayuda/Mujeres/#15-registrar-parto">Registrar Parto</a></li>
+											<li><a class="newWin" href="http://enlaces.org.bo/ayuda/Administracion/#6-reprogramar-la-fecha-de-parto">Reprogramar Parto</a></li>
+											<li><a class="newWin" href="http://enlaces.org.bo/ayuda/Mujeres/#14-registrar-asistencia-a-controles-embarazadasrecien-nacidos">Registrar Asistencia a Controles</a></li>
 										</ul>
 									</li>
 									<li class="dropdown-submenu">
 										<a href="#" data-toggle="dropdown" class="dropdown-toggle"><i class="fa fa-envelope"></i>&nbsp;Mensajes&nbsp;</a>
 										<ul class="dropdown-menu">
-											<li><a class="popup" href="http://enlaces.org.bo/ayuda/Administracion/#71-agenda-de-mensajes">Agenda de mensajes</a></li>
-											<li><a class="popup" href="http://enlaces.org.bo/ayuda/Administracion/#7-mensajes-de-texto">Mensajes de texto</a></li>
-											<li><a class="popup" href="http://enlaces.org.bo/ayuda/Administracion/#72-mensajes-instantaneos">Mensajes instantáneos</a></li>	
-											<li><a class="popup" href="http://enlaces.org.bo/ayuda/Administracion/#73-catalogo-de-mensajes">Catálogo de mensajes</a></li>
+											<li><a class="newWin" href="http://enlaces.org.bo/ayuda/Administracion/#71-agenda-de-mensajes">Agenda de mensajes</a></li>
+											<li><a class="newWin" href="http://enlaces.org.bo/ayuda/Administracion/#7-mensajes-de-texto">Mensajes de texto</a></li>
+											<li><a class="newWin" href="http://enlaces.org.bo/ayuda/Administracion/#72-mensajes-instantaneos">Mensajes instantáneos</a></li>	
+											<li><a class="newWin" href="http://enlaces.org.bo/ayuda/Administracion/#73-catalogo-de-mensajes">Catálogo de mensajes</a></li>
 										</ul>
 									</li>
 									<li class="dropdown-submenu">
 										<a href="#" data-toggle="dropdown" class="dropdown-toggle"><i class="fa fa-line-chart"></i>&nbsp;Reportes&nbsp;</a>
 										<ul class="dropdown-menu">
-											<li><a class="popup" href="http://enlaces.org.bo/ayuda/Reportes/#11-reporte-global">Reporte global</a></li>
-											<li><a class="popup" href="http://enlaces.org.bo/ayuda/Reportes/#12-notificaciones-de-radio">Reporte de Notificaciones de radio</a></li>
-											<li><a class="popup" href="http://enlaces.org.bo/ayuda/Reportes/#13-catalogo-de-mensajes">Reporte catalogo de mensajes</a></li>
+											<li><a class="newWin" href="http://enlaces.org.bo/ayuda/Reportes/#11-reporte-global">Reporte global</a></li>
+											<li><a class="newWin" href="http://enlaces.org.bo/ayuda/Reportes/#12-notificaciones-de-radio">Reporte de Notificaciones de radio</a></li>
+											<li><a class="newWin" href="http://enlaces.org.bo/ayuda/Reportes/#13-catalogo-de-mensajes">Reporte catalogo de mensajes</a></li>
 										</ul>
 									</li>
 									<li class="dropdown-submenu">
 										<a href="#" data-toggle="dropdown" class="dropdown-toggle"><i class="fa fa-bullhorn"></i>&nbsp;Operadores de Radio&nbsp;</a>
 										<ul class="dropdown-menu">
-											<li><a class="popup" href="http://enlaces.org.bo/ayuda/Radio/#12-marcar-comunicacion-como-realizada">Marcar comunicacion como realizada</a></li>
+											<li><a class="newWin" href="http://enlaces.org.bo/ayuda/Radio/#12-marcar-comunicacion-como-realizada">Marcar comunicacion como realizada</a></li>
 										</ul>
 									</li>
 								</ul>

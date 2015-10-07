@@ -60,7 +60,7 @@ class PregnantsCriteria:
 			return query.filter(lambda pr: pr.comunidad.municipio in municipios)
 		elif id_mup:
 			comunidades = _townshipsCrt.get_byId(id_mup).comunidades
-			return query.filter(lambda pr: pr.comunidad in municipios)
+			return query.filter(lambda pr: pr.comunidad in comunidades)
 		elif id_cen:
 			comunidades = _hospitalsCrt.get_byId(id_cen).comunidades
 			return query.filter(lambda pr: pr.comunidad in comunidades)

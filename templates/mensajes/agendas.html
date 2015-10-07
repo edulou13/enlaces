@@ -8,10 +8,16 @@
 		$(function(){
 			$('.message-menu, .sms-agenda').addClass('active');
 			var o_key = $('.fix-table').data('key'), c_filter = [
-				{val:o_key.yesterday, label:'Ayer'},
-				{val:o_key.today, label:'Hoy', def:true},
-				{val:o_key.tomorrow, label:'Mañana'},
-			];
+					{val:o_key.yesterday, label:'Ayer'},
+					{val:o_key.today, label:'Hoy', def:true},
+					{val:o_key.tomorrow, label:'Mañana'},
+				];
+			$('.bpdf').on({
+				click:function(e){
+					e.preventDefault();
+					location.href='/reportes/agendas';
+				}
+			});
 			$('.fix-table').removeAttr('data-key');
 			$('#custom').customPaginator({sort:false}).cfilter(c_filter);
 		});
@@ -20,10 +26,13 @@
 	<%block name="breadcrumbs">
 	<ul id="breadcrumbs" class="breadcrumb">
 		<li><a href="/">Inicio</a></li>
-		<li class="active">Agenda</li>
+		<li class="active">Agendas</li>
 	</ul>
 </%block>
 <%block name="left_content">
+	<div class="button_actions">
+		<button type="button" class="btn btn-sm btn-default bpdf">Ver Agendas</button>
+	</div>
 	<div class="fix-table" data-key='{"today":"${today}","yesterday":"${yesterday}","tomorrow":"${tomorrow}"}'>
 		<%
 			labels = [u'Pre-Natal',u'Post-Natal',u'Promocional Pre-Natal',u'Promocional Post-Natal',u'Interrupción']

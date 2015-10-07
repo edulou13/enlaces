@@ -22,14 +22,34 @@ class CatalogoMensajes(BaseHandler):
 		self.set_header('Content-Disposition', 'inline; {}'.format(filename))
 		self.finish(pm.build_pdf)
 
+@route('/reportes/agendas')
+class AgendasPDF(BaseHandler):
+	@db_session
+	@allowedRole(u'Administrador')
+	def get(self):
+		params = dict(minDate = agendasCrt.minDate(), maxDate = self.utc.now().date(), to_ddmmyy = to_ddmmyy)
+		self.render('reportes/agendas.html', **params)
+	@db_session
+	@allowedRole(u'Administrador')
+	def post(self):
+		self.set_header('Content-type', 'application/json')
+		form = self.form2Dict
+		params = cdict(
+			img_path = path.join(path.dirname(self.settings['static_path']),'statics{}watermark.png'.format(sep)), portrait=False,
+			title = u'Agendas', user = self.current_user.persona, odate = to_ddmmyy(self.utc.now().date()), otime = self.utc.now().time().isoformat()[:8],
+		)
+		pm = ReportMaker(**params)
+		pm.heading_content(u'(desde {} hasta {})'.format(form.f_ini, form.f_fin), align='center', fontSize=8, sep=.1)
+		form.f_ini, form.f_fin = to_yymmdd(form.f_ini), to_yymmdd(form.f_fin)
+		DatasReport.get_Agenda(pm, start_date=form.f_ini, end_date=form.f_fin)
+		self.finish(dumps(pm.build_pdf.encode('base64').replace('\n','')))
+
 @route('/reportes/radio')
 class RadioOperador(BaseHandler):
 	@db_session
 	@allowedRole([u'Administrador',u'Operador de Registro',u'Operador de Radio'])
 	def get(self):
-		params = dict(
-			minDate = agendasCrt.minDate(), maxDate = self.utc.now().date(), to_ddmmyy = to_ddmmyy
-		)
+		params = dict(minDate = agendasCrt.minDate(), maxDate = self.utc.now().date(), to_ddmmyy = to_ddmmyy)
 		self.render('reportes/radio.html', **params)
 	@db_session
 	@allowedRole([u'Administrador',u'Operador de Registro',u'Operador de Radio'], True)
