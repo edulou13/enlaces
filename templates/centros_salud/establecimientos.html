@@ -22,14 +22,14 @@
 		<table id="datatable" class="table table-hover table-bordered" width="99.8%" cellspacing="0">
 			<thead>
 				<tr>
-					<th colspan="8" class="text-center">Establecimientos de Salud</th>
+					<th colspan="6" class="text-center">Establecimientos de Salud</th>
 				</tr>
 				<tr>
 					<th>Establecimiento</th>
 					<th>Ubicación</th>
 					<th>Categoría</th>
-					<th>Encargado</th>
-					<th>Empleados</th>
+					## <th>Encargado</th>
+					## <th>Empleados</th>
 					<th>Comunidades</th>
 					<th>Prestaciones</th>
 					<th>Estado</th>
@@ -41,8 +41,8 @@
 						<td><a href="/centros_salud/modificar_establecimiento?id_cen=${cs.id_cen}" title="Modificar">${cs}</a></td>
 						<td>${cs.ubicado}</td>
 						<td>${cs.tipo}</td>
-						<td>${'{}'.format(cs.encargado or '')}</td>
-						<td>${len(cs.empleados)}</td>
+						## <td>${'{}'.format(cs.encargado or '')}</td>
+						## <td>${len(cs.empleados)}</td>
 						<td class="comunidades">${len(cs.comunidades)}</td>
 						<td class="prestaciones">${len(cs.prestaciones)}</td>
 						<td class="activo">${"Activo" if cs.activo else "Eliminado"}</td>

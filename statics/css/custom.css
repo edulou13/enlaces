@@ -114,6 +114,7 @@ body #container #left-content .fix-table:not(:nth-child(1)) {
 body #container #left-content .detail-card + .btn-actions,
 body #container #left-content .rowBox + .fix-table,
 body #container #left-content .btn-actions + .fix-table,
+body #container #left-content .btn-actions + .SPbig-form,
 body #container #left-content .detail-card + .fix-table,
 body #container #left-content .fix-table + .btn-actions {
   margin-top: 15px !important;

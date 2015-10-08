@@ -41,7 +41,7 @@ class AgendasPDF(BaseHandler):
 		pm = ReportMaker(**params)
 		pm.heading_content(u'(desde {} hasta {})'.format(form.f_ini, form.f_fin), align='center', fontSize=8, sep=.1)
 		form.f_ini, form.f_fin = to_yymmdd(form.f_ini), to_yymmdd(form.f_fin)
-		DatasReport.get_Agenda(pm, start_date=form.f_ini, end_date=form.f_fin)
+		DatasReport.get_RadioOperador(pm, start_date=form.f_ini, end_date=form.f_fin, notifyByRadio=False)
 		self.finish(dumps(pm.build_pdf.encode('base64').replace('\n','')))
 
 @route('/reportes/radio')

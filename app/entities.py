@@ -280,21 +280,18 @@ class Defuncion(db.Entity):
 class Mensaje(db.Entity):
 	id_msj = _PrimaryKey(int, auto=True)
 	nro_control = _Optional(int, nullable=True)
-	titulo = _Optional(unicode, nullable=True)
 	tipo = _Required(int)
 	tenor = _Required(unicode)
-	audio = _Optional(unicode)
+	audio = _Optional(unicode, nullable=True)
 	activo = _Optional(bool, default=True)
 	creado = _Optional(_datetime)
 	modificado = _Optional(_datetime)
 	agendas = _Set(lambda: Agenda, reverse='mensaje')
 	usuario = _Optional(Usuario, reverse='mensajes')
 	def before_insert(self):
-		self.titulo = self.titulo.upper() if self.titulo else None
 		self.tenor = self.tenor.upper()
 		self.creado = self.modificado = _utc.now()
 	def before_update(self):
-		self.titulo = self.titulo.upper() if self.titulo else None
 		self.tenor = self.tenor.upper()
 		self.modificado = _utc.now()
 	def to_dict(self):

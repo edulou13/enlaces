@@ -7,18 +7,18 @@
 	<script type="text/javascript">
 		$(function(){
 			$('.message-menu, .sms-flash').addClass('active');
-			$('.back, .cancel').on({
+			$('.back').on({
 				click:function(e){
 					e.preventDefault();
 					location.href='/mensajes/agendas';
 				}
 			});
-			// $('.cancel').on({
-			// 	click:function(e){
-			// 		e.preventDefault();
-			// 		location.href='/mensajes/sendsms';
-			// 	}
-			// });
+			$('.cancel').on({
+				click:function(e){
+					e.preventDefault();
+					location.href='/mensajes/sendsms';
+				}
+			});
 			$('textarea[name=tenor]').on({
 				keyup:function(e){
 					var strs = $(this).val().length, help = $(this).next('p');
@@ -46,7 +46,9 @@
 							data = oform,
 							function(response){
 								if(response){
-									location.href='/mensajes/agendas';
+									setTimeout(function(){
+										location.href='/mensajes/sendsms';
+									}, 1500);
 								}
 							}
 						);
@@ -77,16 +79,15 @@
 	</ul>
 </%block>
 <%block name="left_content">
+	## <div class="btn-actions">
+	## 	<button type="button" class="btn btn-sm btn-default bpdf">Ver Instantáneos</button>
+	## </div>
 	<div class="SPbig-form">
 		<div class="inner-container">
 			<div class="left-side">
 				<form class="customform">
 					${xsrf_form_html()}
 					<legend>Enviar SMS</legend>
-					<fieldset class="form-group has-feedback">
-						<label>Título:</label>
-						<input type="text" name="titulo" class="form-control input-sm only_g_names" required>
-					</fieldset>
 					<fieldset class="form-group has-feedback">
 						<label>Texto:</label>
 						<textarea name="tenor" class="form-control input-sm only_msg_content" required></textarea>
