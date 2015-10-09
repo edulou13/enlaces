@@ -49,7 +49,7 @@ class RadioOperador(BaseHandler):
 	@db_session
 	@allowedRole([u'Administrador',u'Operador de Registro',u'Operador de Radio'])
 	def get(self):
-		params = dict(minDate = agendasCrt.minDate(), maxDate = self.utc.now().date(), to_ddmmyy = to_ddmmyy)
+		params = dict(minDate = (agendasCrt.minDate() or self.utc.now().date()), maxDate = self.utc.now().date(), to_ddmmyy = to_ddmmyy)
 		self.render('reportes/radio.html', **params)
 	@db_session
 	@allowedRole([u'Administrador',u'Operador de Registro',u'Operador de Radio'], True)
