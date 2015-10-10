@@ -1,7 +1,7 @@
 #-*- coding: utf-8 -*-
 from datetime import timedelta as _timedelta
+from pony.orm import (db_session as _db_session, commit as _commit, flush as _flush, desc as _desc, count as _count, min as _min)
 from ..tools import (utc as utc, to_date as _to_date, to_yymmdd as _to_yymmdd, PreNatal as _PreNatal, PrePromotional as _PrePromotional)
-from pony.orm import (db_session as _db_session, commit as _commit, flush as _flush, desc as _desc, count as _count)
 from ..entities import (Comunidad as _Comunidad, Tipo as _Tipo, Etnia as _Etnia, Persona as _Persona, Embarazo as _Embarazo, Control as _Control, Defuncion as _Defuncion)
 # from .controls import ControlsCriteria as _controlsCrt
 # from .agendas import AgendasCriteria as _agendasCrt
@@ -41,6 +41,9 @@ def pregnancyWeek(pregnant):
 	return (40 - (days_left/7))
 
 class PregnantsCriteria:
+	@classmethod
+	def minDate(cls):
+		return _min(pr.creado.date() for pr in _Persona if pr.sexo=='f')
 	@classmethod
 	def get_byCellphone(cls, telf):
 		return _Persona.get(telf=telf)

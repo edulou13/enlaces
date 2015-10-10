@@ -20,6 +20,9 @@ class HospitalsCriteria:
 	@classmethod
 	def get_byNetwork(cls, id_red):
 		return _Hospital.select(lambda hp: hp.activo and hp.ubicado.municipio.red_salud.id_red==id_red).order_by(lambda hp: (hp.ubicado, hp.nombre))
+	@classmethod
+	def get_byTownship(cls, id_mup):
+		return _Hospital.select(lambda hp: hp.activo and hp.ubicado.municipio.id_mup==id_mup).order_by(lambda hp: (hp.nombre,))
 	def set_hospitals_and_capabilities(self, hospital, communities=[], capabilities=[]):
 		if not hospital.comunidades.is_empty():
 			hospital.comunidades.clear()

@@ -1,6 +1,6 @@
 #-*- coding: utf-8 -*-
 from pony.orm import (db_session as _db_session, commit as _commit, flush as _flush, select as _select)
-from ..entities import (Municipio as _Municipio, Comunidad as _Comunidad)
+from ..entities import (Municipio as _Municipio,)
 # from .communities import CommunitiesCriteria as communitiesCrt
 from . import (communitiesCrt as _communitiesCrt,)
 
@@ -13,7 +13,8 @@ class TownshipsCriteria:
 		return _Municipio.get(id_mup=id_mup)
 	@classmethod
 	def get_All(cls):
-		return _select(tn for tn in _Comunidad)
+		# return _select(tn for tn in _Comunidad)
+		return _select(tn for tn in _Municipio).order_by(lambda tn: (tn.dpto, tn.nombre))
 	@classmethod
 	def save(cls, township, communities=[]):
 		try:

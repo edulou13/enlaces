@@ -2,7 +2,7 @@
 from pony.orm import (db_session as _db_session, desc as _desc)
 from ..entities import (Mensaje as _Msg, Red_Salud as _Red, Persona as _Per)
 from ..tools import (to_date as _to_date, to_ddmmyy as _to_ddmmyy)
-from . import (hospitalsCrt as _hospitalsCrt, pregnant_status as _status, agendasCrt as _agendasCrt)
+from . import (hospitalsCrt as _hospitalsCrt, pregnant_status as _status, pregnancyWeek as _pregnancyWeek, agendasCrt as _agendasCrt)
 
 class _Index(object):
 	def __init__(self):
@@ -115,6 +115,11 @@ class _Pregnant:
 				yield ch
 
 class DatasReport:
+	def __delete(self, repr_maker):
+		check = lambda idx=-1: repr_maker.elements[-1].__class__.__name__ == ('Spacer' or 'Paragraph')
+		if check() and check(-2):
+			repr_maker.del_lastItem
+			repr_maker.del_lastItem
 	@classmethod
 	def get_Catalogo(cls):
 		idx = _Index()
@@ -124,11 +129,26 @@ class DatasReport:
 		with _db_session:
 			table.extend([parse_data(msg) for msg in _Msg.select(lambda msg: msg.tipo>=1 and msg.tipo<=5).order_by(lambda msg: (msg.tipo, msg.nro_control))])
 		return table
-	def __delete(self, repr_maker):
-		check = lambda idx=-1: repr_maker.elements[-1].__class__.__name__ == ('Spacer' or 'Paragraph')
-		if check() and check(-2):
-			repr_maker.del_lastItem
-			repr_maker.del_lastItem
+	@classmethod
+	def get_Womens(cls, repr_maker, start_date, end_date, id_cen):
+		start_date, end_date = _to_date(start_date), _to_date(end_date)
+		titles = [u'Nombres y Apellidos', u'Celular', u'Contacto', u'Celular', u'Estado', u'Semana']
+		hospital = _hospitalsCrt.get_byId(id_cen);
+		section = _Index()
+		repr_maker.heading_content(u'Red de Salud: {}'.format(hospital.ubicado.municipio.red_salud.__str__()), align='justify', sep=.3)
+		repr_maker.heading_content(u'Municipio: {}, {}'.format(hospital.ubicado.municipio.__str__(), hospital.ubicado.municipio.dpto), align='justify', sep=.3)
+		repr_maker.heading_content(u'Establecimiento de Salud: {}'.format(hospital.nombre), align='justify', sep=.3)
+		for com in hospital.comunidades.select(lambda com: com.activo).order_by(lambda com: (com.nombre,)):
+			repr_maker.heading_content(u'{}.- Comunidad: {}'.format(section.increment, com.nombre), align='justify', sep=.3)
+			table= [titles]
+			for pr in com.personas.select(lambda pr: pr.sexo=='f' and pr.centro_salud and pr.centro_salud.id_cen==hospital.id_cen).order_by(lambda pr: (pr.nombres, pr.apellidos)):
+				status = _status(pr)
+				table.extend([[pr.__str__(), (pr.telf or ''), pr.contacto.__str__(), (pr.contacto.telf or ''), status[1], (_pregnancyWeek(pr) if status[0] in [2,3,8] else '')]])
+			if len(table) > 1:
+				repr_maker.parse_datatable(table, cellsW={0:5.7,1:2,2:5.7,3:2,4:6,5:2})
+			else:
+				cls().__delete(repr_maker)
+				section.decrement
 	@classmethod
 	def get_RadioOperador(cls, repr_maker, start_date, end_date, notifyByRadio=True):
 		start_date, end_date = _to_date(start_date), _to_date(end_date)

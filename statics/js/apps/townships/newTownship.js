@@ -16,7 +16,7 @@ $(function(){
 			location.href='/municipios/gestion?id_red='+$('input[name=id_red]').val();
 		}
 	});
-	var dptos = ['Beni', 'Cochamba', 'Chuquisaca', 'La Paz', 'Oruro', 'Pando', 'Potosí', 'Santa Crúz', 'Tarija'],
+	var dptos = ['BENI', 'COCHABAMBA', 'CHUQUISACA', 'LA PAZ', 'ORURO', 'PANDO', 'POTOSÍ', 'SANTA CRÚZ', 'TARIJA'],
 		options = [], count = 0
 		tmpl = function(n){
 			return '<div class="row comunidad-'+n+'">'+
@@ -32,7 +32,7 @@ $(function(){
 			'</div></div>';
 		};
 	for (var i = 0; i < dptos.length; i++) {
-		if(dptos[i]=='Cochamba'){
+		if(dptos[i]=='COCHABAMBA'){
 			options.push('<option value="'+dptos[i]+'" selected>'+dptos[i]+'</option>');
 		} else{
 			options.push('<option value="'+dptos[i]+'">'+dptos[i]+'</option>');

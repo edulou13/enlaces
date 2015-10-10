@@ -27,7 +27,7 @@ $(function(){
 			'</div></div>';
 		};
 	for (var i = 0; i < dptos.length; i++) {
-		if(dptos[i]=='Cochamba'){
+		if(dptos[i]=='COCHABAMBA'){
 			options.push('<option value="'+dptos[i]+'" selected>'+dptos[i]+'</option>');
 		} else{
 			options.push('<option value="'+dptos[i]+'">'+dptos[i]+'</option>');
