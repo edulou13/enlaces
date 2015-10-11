@@ -2,7 +2,7 @@
 from pony.orm import (db_session as _db_session, desc as _desc)
 from ..entities import (Mensaje as _Msg, Red_Salud as _Red, Persona as _Per)
 from ..tools import (to_date as _to_date, to_ddmmyy as _to_ddmmyy)
-from . import (hospitalsCrt as _hospitalsCrt, pregnant_status as _status, pregnancyWeek as _pregnancyWeek, agendasCrt as _agendasCrt)
+from . import (hospitalsCrt as _hospitalsCrt, pregnant_status as _status, pregnancyWeek as _pregnancyWeek, messagesCrt as _messagesCrt, agendasCrt as _agendasCrt)
 
 class _Index(object):
 	def __init__(self):
@@ -129,6 +129,17 @@ class DatasReport:
 		with _db_session:
 			table.extend([parse_data(msg) for msg in _Msg.select(lambda msg: msg.tipo>=1 and msg.tipo<=5).order_by(lambda msg: (msg.tipo, msg.nro_control))])
 		return table
+	@classmethod
+	def get_SMS(cls, repr_maker, start_date, end_date):
+		start_date, end_date = _to_date(start_date), _to_date(end_date)
+		table = [[u'#', u'Fecha', u'Hora', u'Mensaje', u'Remitente', u'Destinatario(s)']]
+		index = _Index()
+		for msg in _messagesCrt.smsReport(start_date, end_date):
+			row = [index.increment, _to_ddmmyy(msg.creado.date()), '{}'.format(msg.modificado.isoformat()[11:19]), msg.tenor, msg.usuario.persona.__str__()]
+			query = msg.agendas.select().order_by(lambda ag: (ag.persona.nombres, ag.persona.apellidos))
+			row += [u', '.join([ag.persona.__str__() for ag in query])]
+			table.extend([row])
+		repr_maker.parse_datatable(table, cellsW={0:2,1:2,2:1.5,3:7,4:5.5,5:5})
 	@classmethod
 	def get_Womens(cls, repr_maker, start_date, end_date, id_cen):
 		start_date, end_date = _to_date(start_date), _to_date(end_date)

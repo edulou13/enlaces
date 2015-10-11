@@ -19,6 +19,12 @@
 					location.href='/mensajes/sendsms';
 				}
 			});
+			$('.bpdf').on({
+				click:function(e){
+					e.preventDefault();
+					location.href='/reportes/sms';
+				}
+			});
 			$('textarea[name=tenor]').on({
 				keyup:function(e){
 					var strs = $(this).val().length, help = $(this).next('p');
@@ -75,13 +81,13 @@
 	<ul id="breadcrumbs" class="breadcrumb">
 		<li><a href="/">Inicio</a></li>
 		<li><a href="#" class="back">Agenda</a></li>
-		<li class="active">Enviar SMS</li>
+		<li class="active">Instantáneos</li>
 	</ul>
 </%block>
 <%block name="left_content">
-	## <div class="btn-actions">
-	## 	<button type="button" class="btn btn-sm btn-default bpdf">Ver Instantáneos</button>
-	## </div>
+	<div class="btn-actions">
+		<button type="button" class="btn btn-sm btn-default bpdf">Ver Instantáneos</button>
+	</div>
 	<div class="SPbig-form">
 		<div class="inner-container">
 			<div class="left-side">
