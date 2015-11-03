@@ -297,7 +297,7 @@ class Mensaje(db.Entity):
 	def to_dict(self):
 		return dict(
 				id_msj = self.id_msj, nro_control = self.nro_control or None,
-				titulo = self.titulo or None, tipo = self.tipo, tenor = self.tenor, audio = self.audio or None
+				tipo = self.tipo, tenor = self.tenor, audio = self.audio or None
 			)
 
 class Control(db.Entity):

@@ -55,7 +55,7 @@
 	</div>
 	<div class="btn-actions">
 		<a class="back btn btn-sm btn-warning">Regresar</a>
-		% if 0 <= pregnant_status(pr)[0] <= 4:
+		% if (0 <= pregnant_status(pr)[0] <= 4) or (pregnant_status(pr)[0] == 8):
 			<a href="#" class="edit btn btn-sm btn-info">Editar Datos</a>
 		% endif
 		% if pregnant_status(pr)[0]==1 or pregnant_status(pr)[0]==4:

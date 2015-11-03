@@ -22,8 +22,9 @@ class AgendasCriteria:
 		return _Agenda.select(lambda ag: ag.fecha_con>=backward).order_by(lambda ag: (ag.persona.comunidad.nombre, ag.persona.nombres, ag.persona.apellidos, _desc(ag.fecha_con)))
 	@classmethod
 	def AgendasReport(cls, id_com, start_date, end_date):
-		query = _Agenda.select(lambda ag: (ag.mensaje.tipo>=1 and ag.mensaje.tipo<=5) and ag.persona.cobertura!=2 and ag.persona.comunidad.id_com==id_com).order_by(lambda ag: (ag.persona.nombres, ag.persona.apellidos, ag.fecha_con))
-		for ag in query:
+		# query = _Agenda.select(lambda ag: (ag.mensaje.tipo>=1 and ag.mensaje.tipo<=5) and ag.persona.cobertura!=2 and ag.persona.comunidad.id_com==id_com).order_by(lambda ag: (ag.persona.nombres, ag.persona.apellidos, ag.fecha_con))
+		query = _Agenda.select(lambda ag: (ag.mensaje.tipo>=1 and ag.mensaje.tipo<=5) and ag.persona.comunidad.id_com==id_com).order_by(lambda ag: (ag.persona.nombres, ag.persona.apellidos, ag.fecha_con))
+		for ag in query.filter(lambda ag: ag.sms_estado == True or ag.lmd_estado == True):
 			if (ag.fecha_con>=start_date and ag.modificado.date()<=end_date) and (ag.sms_estado or ag.lmd_estado):
 				yield ag
 				continue
